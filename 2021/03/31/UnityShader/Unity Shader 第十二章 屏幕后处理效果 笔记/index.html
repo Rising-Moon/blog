@@ -19,7 +19,7 @@
     <meta name="description" content="屏幕后处理效果建立一个基本的屏幕后处理脚本系统 屏幕后处理，通常指的是在渲染完整个场景得到屏幕图像后，再对这个图像进行一系列操作，实现各种屏幕特效。可以为游戏画面添加更多的艺术效果，例如景深、运动模糊。 要实现屏幕后处理的基础在于得到渲染后的屏幕图像吗，即抓取平屏幕，Unity为我们提供了这样一个函数：  MonoBehaviour.OnRenderImage(RenderTexture src,">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RisingMoon的博客">
-<meta property="og:url" content="https://rising-moon.github.io/blog/2021/03/31/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0%20%E5%B1%8F%E5%B9%95%E5%90%8E%E5%A4%84%E7%90%86%E6%95%88%E6%9E%9C%20%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:url" content="https://rising-moon.github.io/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0%20%E5%B1%8F%E5%B9%95%E5%90%8E%E5%A4%84%E7%90%86%E6%95%88%E6%9E%9C%20%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="RisingMoon的博客">
 <meta property="og:description" content="屏幕后处理效果建立一个基本的屏幕后处理脚本系统 屏幕后处理，通常指的是在渲染完整个场景得到屏幕图像后，再对这个图像进行一系列操作，实现各种屏幕特效。可以为游戏画面添加更多的艺术效果，例如景深、运动模糊。 要实现屏幕后处理的基础在于得到渲染后的屏幕图像吗，即抓取平屏幕，Unity为我们提供了这样一个函数：  MonoBehaviour.OnRenderImage(RenderTexture src,">
 <meta property="og:locale" content="zh_CN">
@@ -71,7 +71,7 @@
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"rising-moon.github.io","root":"/blog/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/blog/local-search.xml"};
+    var CONFIG = {"hostname":"rising-moon.github.io","root":"/blog/","version":"1.8.14","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":5},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/blog/local-search.xml"};
   </script>
   <script  src="/blog/js/utils.js" ></script>
   <script  src="/blog/js/color-schema.js" ></script>
@@ -79,11 +79,11 @@
 
 
 <body>
-  <header style="height: 70vh;">
+  <header style="height: 40vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/blog/">
-      <strong>Fluid</strong>
+      <strong>RisingMoon的博客</strong>
     </a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
@@ -113,18 +113,6 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/blog/archives/">
-                <i class="iconfont icon-archive-fill"></i>
-                归档
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
               <a class="nav-link" href="/blog/categories/">
                 <i class="iconfont icon-category-fill"></i>
                 分类
@@ -140,18 +128,6 @@
               <a class="nav-link" href="/blog/tags/">
                 <i class="iconfont icon-tags-fill"></i>
                 标签
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/blog/about/">
-                <i class="iconfont icon-user-fill"></i>
-                关于
               </a>
             </li>
           
@@ -182,10 +158,17 @@
           <div class="page-header text-center fade-in-up">
             <span class="h2" id="subtitle" title="">
               
+                
+              
             </span>
 
             
               <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      RisingMoon
+    </span>
   
   
     <span class="post-meta">
@@ -199,19 +182,7 @@
 
 <div class="mt-1">
   
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-chart"></i>
-      2.3k 字
-    </span>
-  
 
-  
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-clock-fill"></i>
-      
-      
-      20 分钟
-    </span>
   
 
   
@@ -322,7 +293,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/blog/2021/03/31/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0%20%E4%BD%BF%E7%94%A8%E6%B7%B1%E5%BA%A6%E6%B3%95%E7%BA%BF%E5%92%8C%E7%BA%B9%E7%90%86%20%E7%AC%94%E8%AE%B0/">
+                      <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E7%AB%A0%20%E9%AB%98%E7%BA%A7%E7%BA%B9%E7%90%86%20%E7%AC%94%E8%AE%B0/">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile"></span>
                         <span class="visible-mobile">上一篇</span>
@@ -332,7 +303,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/blog/2021/03/31/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E4%BA%94%E7%AB%A0%20%E4%BD%BF%E7%94%A8%E5%99%AA%E5%A3%B0%20%E7%AC%94%E8%AE%B0/">
+                      <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%9B%9B%E7%AB%A0%20%E5%AD%A6%E4%B9%A0Shader%E6%89%80%E9%9C%80%E7%9A%84%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/">
                         <span class="hidden-mobile"></span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -463,17 +434,6 @@
 
 
 
-
-  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var title = document.getElementById('subtitle').title;
-      
-        typing(title);
-      
-    })(window, document);
-  </script>
 
 
 

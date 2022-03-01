@@ -19,7 +19,7 @@
     <meta name="description" content="基础纹理 纹理最初的目的就是使用一张图片来控制模型的外观。使用纹理映射技术，我们可以把一张图“黏”在模型表面，逐纹素（纹素的名字是为了与像素作区分）地控制模型的颜色。   在美术人员建模时，通常会在建模软件中利用纹理展开技术把纹理映射坐标存储到每个顶点上。纹理映射坐标定义了该顶点在纹理中对应的2D坐标。通常，这些坐标使用一个二维变量(u,v)来表示，其中u是横向坐标，而v是纵向坐标。因此，纹理坐标">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RisingMoon的博客">
-<meta property="og:url" content="https://rising-moon.github.io/blog/2021/03/31/Unity%20Shader%20%E7%AC%AC%E4%B8%83%E7%AB%A0%20%E5%9F%BA%E7%A1%80%E7%BA%B9%E7%90%86%20%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:url" content="https://rising-moon.github.io/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E4%B8%83%E7%AB%A0%20%E5%9F%BA%E7%A1%80%E7%BA%B9%E7%90%86%20%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="RisingMoon的博客">
 <meta property="og:description" content="基础纹理 纹理最初的目的就是使用一张图片来控制模型的外观。使用纹理映射技术，我们可以把一张图“黏”在模型表面，逐纹素（纹素的名字是为了与像素作区分）地控制模型的颜色。   在美术人员建模时，通常会在建模软件中利用纹理展开技术把纹理映射坐标存储到每个顶点上。纹理映射坐标定义了该顶点在纹理中对应的2D坐标。通常，这些坐标使用一个二维变量(u,v)来表示，其中u是横向坐标，而v是纵向坐标。因此，纹理坐标">
 <meta property="og:locale" content="zh_CN">
@@ -69,7 +69,7 @@
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"rising-moon.github.io","root":"/blog/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/blog/local-search.xml"};
+    var CONFIG = {"hostname":"rising-moon.github.io","root":"/blog/","version":"1.8.14","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":5},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/blog/local-search.xml"};
   </script>
   <script  src="/blog/js/utils.js" ></script>
   <script  src="/blog/js/color-schema.js" ></script>
@@ -77,11 +77,11 @@
 
 
 <body>
-  <header style="height: 70vh;">
+  <header style="height: 40vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/blog/">
-      <strong>Fluid</strong>
+      <strong>RisingMoon的博客</strong>
     </a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
@@ -111,18 +111,6 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/blog/archives/">
-                <i class="iconfont icon-archive-fill"></i>
-                归档
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
               <a class="nav-link" href="/blog/categories/">
                 <i class="iconfont icon-category-fill"></i>
                 分类
@@ -138,18 +126,6 @@
               <a class="nav-link" href="/blog/tags/">
                 <i class="iconfont icon-tags-fill"></i>
                 标签
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/blog/about/">
-                <i class="iconfont icon-user-fill"></i>
-                关于
               </a>
             </li>
           
@@ -180,10 +156,17 @@
           <div class="page-header text-center fade-in-up">
             <span class="h2" id="subtitle" title="">
               
+                
+              
             </span>
 
             
               <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      RisingMoon
+    </span>
   
   
     <span class="post-meta">
@@ -197,19 +180,7 @@
 
 <div class="mt-1">
   
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-chart"></i>
-      4k 字
-    </span>
-  
 
-  
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-clock-fill"></i>
-      
-      
-      34 分钟
-    </span>
   
 
   
@@ -333,7 +304,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/blog/2021/03/31/Unity%20Shader%20%E7%AC%AC%E4%BA%8C%E7%AB%A0%20%E6%B8%B2%E6%9F%93%E6%B5%81%E6%B0%B4%E7%BA%BF%20%E7%AC%94%E8%AE%B0/">
+                      <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E4%BA%8C%E7%AB%A0%20%E6%B8%B2%E6%9F%93%E6%B5%81%E6%B0%B4%E7%BA%BF%20%E7%AC%94%E8%AE%B0/">
                         <span class="hidden-mobile">渲染流水线</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -464,17 +435,6 @@
 
 
 
-
-  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var title = document.getElementById('subtitle').title;
-      
-        typing(title);
-      
-    })(window, document);
-  </script>
 
 
 
