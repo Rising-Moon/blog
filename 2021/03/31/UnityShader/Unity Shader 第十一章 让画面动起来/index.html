@@ -16,23 +16,21 @@
   <meta name="author" content="RisingMoon">
   <meta name="keywords" content="Unity 渲染">
   
-    <meta name="description" content="尽管游戏渲染一般都是以照相写实主义作为主要目标。但也有许多游戏使用了非真实感渲染的方法来渲染游戏画面。 非真实感渲染的目标是使用一些渲染方法，使得画面达到和某些特殊的绘画风格相似的效果。例如：卡通、水彩风格。  卡通风格的渲染 实现卡通渲染有很多方法，其中之一就是基于色调的光照模型。 在实现中，我们往往会使用一张一维纹理进行采样，以控制漫反射的色调。 卡通风格的高光效果也和我们之前学习的光照不同">
+    <meta name="description" content="Unity Shader中的内置变量（时间篇） Unity Shader提供了一系列关于时间的内置变量来允许我们在Shader中访问运行时间，实现各种动画效果。Unity内置的时间变量     名称 类型 描述    _Time float4 t是自该场景加载开始所经过的时间，4个分量的值分别是(t&#x2F;20,t,2t,3t)。   _SinTime float4 t是时间的正弦值，4个分量">
 <meta property="og:type" content="article">
-<meta property="og:title" content="非真实感渲染">
-<meta property="og:url" content="https://rising-moon.github.io/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E5%9B%9B%E7%AB%A0%20%E9%9D%9E%E7%9C%9F%E5%AE%9E%E6%84%9F%E6%B8%B2%E6%9F%93%20%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:title" content="让画面动起来">
+<meta property="og:url" content="https://rising-moon.github.io/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0%20%E8%AE%A9%E7%94%BB%E9%9D%A2%E5%8A%A8%E8%B5%B7%E6%9D%A5/index.html">
 <meta property="og:site_name" content="RisingMoon的博客">
-<meta property="og:description" content="尽管游戏渲染一般都是以照相写实主义作为主要目标。但也有许多游戏使用了非真实感渲染的方法来渲染游戏画面。 非真实感渲染的目标是使用一些渲染方法，使得画面达到和某些特殊的绘画风格相似的效果。例如：卡通、水彩风格。  卡通风格的渲染 实现卡通渲染有很多方法，其中之一就是基于色调的光照模型。 在实现中，我们往往会使用一张一维纹理进行采样，以控制漫反射的色调。 卡通风格的高光效果也和我们之前学习的光照不同">
+<meta property="og:description" content="Unity Shader中的内置变量（时间篇） Unity Shader提供了一系列关于时间的内置变量来允许我们在Shader中访问运行时间，实现各种动画效果。Unity内置的时间变量     名称 类型 描述    _Time float4 t是自该场景加载开始所经过的时间，4个分量的值分别是(t&#x2F;20,t,2t,3t)。   _SinTime float4 t是时间的正弦值，4个分量">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20190507110327608.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNDg2NjM5,size_16,color_FFFFFF,t_70">
 <meta property="article:published_time" content="2021-03-31T10:09:28.300Z">
-<meta property="article:modified_time" content="2022-03-01T10:20:47.584Z">
+<meta property="article:modified_time" content="2022-03-01T10:21:16.367Z">
 <meta property="article:author" content="RisingMoon">
 <meta property="article:tag" content="《UnityShader入门精要》">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190507110327608.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNDg2NjM5,size_16,color_FFFFFF,t_70">
   
   
-  <title>非真实感渲染 - RisingMoon的博客</title>
+  <title>让画面动起来 - RisingMoon的博客</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
@@ -154,9 +152,9 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="非真实感渲染">
+            <span class="h2" id="subtitle" title="让画面动起来">
               
-                非真实感渲染
+                让画面动起来
               
             </span>
 
@@ -208,33 +206,48 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">非真实感渲染</h1>
+            <h1 style="display: none">让画面动起来</h1>
             
             <div class="markdown-body">
-              <ul>
-<li>尽管游戏渲染一般都是以<strong>照相写实主义</strong>作为主要目标。但也有许多游戏使用了<strong>非真实感渲染</strong>的方法来渲染游戏画面。</li>
-<li>非真实感渲染的目标是使用一些渲染方法，使得画面达到和某些特殊的绘画风格相似的效果。例如：卡通、水彩风格。</li>
+              <h2 id="Unity-Shader中的内置变量（时间篇）"><a href="#Unity-Shader中的内置变量（时间篇）" class="headerlink" title="Unity Shader中的内置变量（时间篇）"></a>Unity Shader中的内置变量（时间篇）</h2><ul>
+<li>Unity Shader提供了一系列关于时间的内置变量来允许我们在Shader中访问运行时间，实现各种动画效果。<h4 id="Unity内置的时间变量"><a href="#Unity内置的时间变量" class="headerlink" title="Unity内置的时间变量"></a>Unity内置的时间变量</h4></li>
 </ul>
-<h2 id="卡通风格的渲染"><a href="#卡通风格的渲染" class="headerlink" title="卡通风格的渲染"></a>卡通风格的渲染</h2><ul>
-<li>实现卡通渲染有很多方法，其中之一就是基于色调的光照模型。</li>
-<li>在实现中，我们往往会使用一张一维纹理进行采样，以控制漫反射的色调。</li>
-<li>卡通风格的高光效果也和我们之前学习的光照不同，卡通风格中，模型的高光往往是一块块分界明显的纯色区域。</li>
-<li>卡通风格通常还需要在物体边缘部分绘制轮廓</li>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>_Time</td>
+<td>float4</td>
+<td>t是自该场景加载开始所经过的时间，4个分量的值分别是(t&#x2F;20,t,2t,3t)。</td>
+</tr>
+<tr>
+<td>_SinTime</td>
+<td>float4</td>
+<td>t是时间的正弦值，4个分量的值分别是(t&#x2F;8,t&#x2F;4,t&#x2F;2,t)。</td>
+</tr>
+<tr>
+<td>_CosTime</td>
+<td>float4</td>
+<td>t是时间的余弦值，4个分量的值分别是(t&#x2F;8,t&#x2F;4,t&#x2F;2,t)。</td>
+</tr>
+<tr>
+<td>unity_DeltaTime</td>
+<td>float4</td>
+<td>dt是时间增量，4个分量的值分别是(dt,1&#x2F;dt,smoothDt,1&#x2F;smoothDt)</td>
+</tr>
+</tbody></table>
+<h2 id="纹理动画"><a href="#纹理动画" class="headerlink" title="纹理动画"></a>纹理动画</h2><ul>
+<li>在各种资源都比较局限的移动平台上，我们甚至可以用纹理动画代替复杂的粒子系统。</li>
 </ul>
-<h3 id="渲染轮廓线"><a href="#渲染轮廓线" class="headerlink" title="渲染轮廓线"></a>渲染轮廓线</h3><p>有许多轮廓线的渲染方法被提出，这里介绍其中五种：</p>
-<ul>
-<li>基于观察角度和表面法线的轮廓线渲染。使用视角方向和表面法线的点乘结果来得到轮廓线的信息。这种方法简单快速，一个Pass中就可以得到渲染结果，但局限性很大，很多模型渲染出来的描边效果不尽如人意。</li>
-<li>过程式几何轮廓线渲染。使用两个Pass渲染，第一个Pass渲染背面的面片，并使用某些技术让它的轮廓可见；第二个Pass再正常渲染正面的面片。这种方法有点在于快速有效，并且适用于绝大多数表面光滑的模型，但它的缺点是不适合类似正方体这类表面平整的模型。</li>
-<li>基于图像处理的轮廓线渲染。之前边缘检测的方法就属于这个类别。这种方法有点在于可以适用于任何类型的模型。但也有局限性，一些深度和法线变化很小的轮廓无法被检测出来，例如桌子上的纸张。</li>
-<li>基于轮廓边检测的轮廓线渲染。上述提到的方法无法控制轮廓线的风格渲染。我们检测一条边是否是轮廓边的公式很简单：<figure class="highlight gcode"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><pre><code class="hljs gcode"><span class="hljs-comment">(n0·v&gt;0)</span> ≠ <span class="hljs-comment">(n1·v&gt;0)</span><br></code></pre></td></tr></table></figure></li>
-<li>其中n0和n1是相邻两个三角面片的法向量，v是视角到该边上任意顶点的方向。检测出两个三角面是否一个朝正面，一个朝背面。我们可以再几何着色器的帮助下实现检测过程。</li>
-<li>最后一个种类就是混合了上述的几种渲染方法。例如，首先找到精确的轮廓边，把模型和轮廓边渲染到纹理中，再使用图像处理的方法识别出轮廓线，并在图像空间下进行风格化渲染。<h3 id="添加高光"><a href="#添加高光" class="headerlink" title="添加高光"></a>添加高光</h3></li>
-<li>计算normal和halfDir的点乘结果，把该值和一个阈值进行比较，如果小于该阈值，高光反射系数为0，否则返回1；<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">float spec</span> = dot(worldNormal,worldHalfDir);<br><span class="hljs-attribute">spec</span> = step(threshold,spec);<br></code></pre></td></tr></table></figure></li>
-<li>系数直接突变会使边界处产生锯齿，我们可以在边界处很小的一块区域内，进行平滑处理。<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">float spec</span> = dot(worldNormal,worldHalfDir);<br><span class="hljs-attribute">spec</span> = smoothstep(-w,w,spec - threshold);<br></code></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="像素风格的渲染"><a href="#像素风格的渲染" class="headerlink" title="像素风格的渲染"></a>像素风格的渲染</h2><ul>
-<li>使用了提前生成的素描纹理来实现实时的素描风格渲染，这些纹理组成了一个<strong>色调艺术映射</strong><br><img src="https://img-blog.csdnimg.cn/20190507110327608.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNDg2NjM5,size_16,color_FFFFFF,t_70" srcset="/blog/img/loading.gif" lazyload alt="TAM例子">  </li>
-<li>图中从左到右纹理中的笔触逐渐增多，用于模拟不同光照下的漫反射效果。</li>
+<h3 id="序列帧动画"><a href="#序列帧动画" class="headerlink" title="序列帧动画"></a>序列帧动画</h3><ul>
+<li>一次播放一系列关键帧图像，播放速度达到一定数值时，看起来就是一个连续的动画。</li>
+<li>优点是灵活性强，不需要任何计算就可以得到非常细腻的动画。</li>
+<li>缺点是制作一张出色的序列帧纹理需要的美术工程量也很大。</li>
 </ul>
 
             </div>
@@ -263,9 +276,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E5%85%AD%E7%AB%A0%20Unity%E4%B8%AD%E7%9A%84%E6%B8%B2%E6%9F%93%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%20%E7%AC%94%E8%AE%B0/">
+                      <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0%20%E4%BD%BF%E7%94%A8%E6%B7%B1%E5%BA%A6%E6%B3%95%E7%BA%BF%E5%92%8C%E7%BA%B9%E7%90%86%20%E7%AC%94%E8%AE%B0/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Unity中的渲染优化技术</span>
+                        <span class="hidden-mobile">使用深度法线和纹理</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -273,8 +286,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E7%AB%A0%20%E9%AB%98%E7%BA%A7%E7%BA%B9%E7%90%86%20%E7%AC%94%E8%AE%B0/">
-                        <span class="hidden-mobile">高级纹理</span>
+                      <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0%20%E5%B1%8F%E5%B9%95%E5%90%8E%E5%A4%84%E7%90%86%E6%95%88%E6%9E%9C%20%E7%AC%94%E8%AE%B0/">
+                        <span class="hidden-mobile">屏幕后处理效果</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

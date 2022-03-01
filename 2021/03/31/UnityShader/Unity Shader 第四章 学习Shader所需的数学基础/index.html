@@ -16,21 +16,21 @@
   <meta name="author" content="RisingMoon">
   <meta name="keywords" content="Unity 渲染">
   
-    <meta name="description" content="学习Shader所需的数学基础笛卡尔坐标系三维笛卡尔坐标系 左手坐标系 右手坐标系Unity使用的坐标系 模型空间 左手坐标系 世界空间 左手坐标系 观察空间 右手坐标系，摄像机前向是z轴的负方向。坐标变换 模型空间变换到世界空间中，这个变换叫做模型变换。 世界空间变换的观察空间，这个变换叫做观察变换。 观察空间变换到裁剪空间（齐次剪切空间），这个变换的矩阵叫做裁剪矩阵，也被称为投影矩阵。裁剪空间">
+    <meta name="description" content="笛卡尔坐标系三维笛卡尔坐标系 左手坐标系 右手坐标系Unity使用的坐标系 模型空间 左手坐标系 世界空间 左手坐标系 观察空间 右手坐标系，摄像机前向是z轴的负方向。坐标变换 模型空间变换到世界空间中，这个变换叫做模型变换。 世界空间变换的观察空间，这个变换叫做观察变换。 观察空间变换到裁剪空间（齐次剪切空间），这个变换的矩阵叫做裁剪矩阵，也被称为投影矩阵。裁剪空间由视锥体决定视锥体定义了场景内">
 <meta property="og:type" content="article">
-<meta property="og:title" content="RisingMoon的博客">
+<meta property="og:title" content="学习Shader所需的数学基础">
 <meta property="og:url" content="https://rising-moon.github.io/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%9B%9B%E7%AB%A0%20%E5%AD%A6%E4%B9%A0Shader%E6%89%80%E9%9C%80%E7%9A%84%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/index.html">
 <meta property="og:site_name" content="RisingMoon的博客">
-<meta property="og:description" content="学习Shader所需的数学基础笛卡尔坐标系三维笛卡尔坐标系 左手坐标系 右手坐标系Unity使用的坐标系 模型空间 左手坐标系 世界空间 左手坐标系 观察空间 右手坐标系，摄像机前向是z轴的负方向。坐标变换 模型空间变换到世界空间中，这个变换叫做模型变换。 世界空间变换的观察空间，这个变换叫做观察变换。 观察空间变换到裁剪空间（齐次剪切空间），这个变换的矩阵叫做裁剪矩阵，也被称为投影矩阵。裁剪空间">
+<meta property="og:description" content="笛卡尔坐标系三维笛卡尔坐标系 左手坐标系 右手坐标系Unity使用的坐标系 模型空间 左手坐标系 世界空间 左手坐标系 观察空间 右手坐标系，摄像机前向是z轴的负方向。坐标变换 模型空间变换到世界空间中，这个变换叫做模型变换。 世界空间变换的观察空间，这个变换叫做观察变换。 观察空间变换到裁剪空间（齐次剪切空间），这个变换的矩阵叫做裁剪矩阵，也被称为投影矩阵。裁剪空间由视锥体决定视锥体定义了场景内">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-03-31T10:09:28.300Z">
-<meta property="article:modified_time" content="2021-03-31T10:10:02.866Z">
+<meta property="article:modified_time" content="2022-03-01T10:21:37.185Z">
 <meta property="article:author" content="RisingMoon">
-<meta property="article:tag" content="Unity 渲染">
+<meta property="article:tag" content="《UnityShader入门精要》">
 <meta name="twitter:card" content="summary_large_image">
   
   
-  <title>RisingMoon的博客</title>
+  <title>学习Shader所需的数学基础 - RisingMoon的博客</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
@@ -152,9 +152,9 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="">
+            <span class="h2" id="subtitle" title="学习Shader所需的数学基础">
               
-                
+                学习Shader所需的数学基础
               
             </span>
 
@@ -206,10 +206,10 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none"></h1>
+            <h1 style="display: none">学习Shader所需的数学基础</h1>
             
             <div class="markdown-body">
-              <h1 id="学习Shader所需的数学基础"><a href="#学习Shader所需的数学基础" class="headerlink" title="学习Shader所需的数学基础"></a>学习Shader所需的数学基础</h1><h2 id="笛卡尔坐标系"><a href="#笛卡尔坐标系" class="headerlink" title="笛卡尔坐标系"></a>笛卡尔坐标系</h2><h3 id="三维笛卡尔坐标系"><a href="#三维笛卡尔坐标系" class="headerlink" title="三维笛卡尔坐标系"></a>三维笛卡尔坐标系</h3><ul>
+              <h2 id="笛卡尔坐标系"><a href="#笛卡尔坐标系" class="headerlink" title="笛卡尔坐标系"></a>笛卡尔坐标系</h2><h3 id="三维笛卡尔坐标系"><a href="#三维笛卡尔坐标系" class="headerlink" title="三维笛卡尔坐标系"></a>三维笛卡尔坐标系</h3><ul>
 <li>左手坐标系</li>
 <li>右手坐标系<h3 id="Unity使用的坐标系"><a href="#Unity使用的坐标系" class="headerlink" title="Unity使用的坐标系"></a>Unity使用的坐标系</h3></li>
 <li>模型空间 左手坐标系</li>
@@ -231,6 +231,13 @@
               <div class="post-metas mb-3">
                 
                 
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/blog/tags/%E3%80%8AUnityShader%E5%85%A5%E9%97%A8%E7%B2%BE%E8%A6%81%E3%80%8B/">《UnityShader入门精要》</a>
+                    
+                  </div>
+                
               </div>
               
                 <p class="note note-warning">
@@ -246,7 +253,7 @@
                     
                       <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E7%AB%A0%20%E9%AB%98%E7%BA%A7%E7%BA%B9%E7%90%86%20%E7%AC%94%E8%AE%B0/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile"></span>
+                        <span class="hidden-mobile">高级纹理</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     

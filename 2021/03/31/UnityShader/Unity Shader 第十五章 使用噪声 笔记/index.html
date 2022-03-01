@@ -16,21 +16,21 @@
   <meta name="author" content="RisingMoon">
   <meta name="keywords" content="Unity 渲染">
   
-    <meta name="description" content="使用噪声消融效果 消融效果常见于游戏中的角色死亡、地图烧毁等效果。 原理十分简单，概括来说就是使用噪声纹理+透明度测试。我们使用噪声纹理采样的结果与某个阈值比较，如果小于阈值，就是用clip函数把对应的像素减掉，这些部分就对应了被“烧毁”的区域。镂空区域边缘的烧焦效果是将两种颜色混合，再用pow函数处理后，与原纹理颜色混合后的结果。 使用不同的噪声和纹理属性（材质面板上的Tiling和Offset">
+    <meta name="description" content="消融效果 消融效果常见于游戏中的角色死亡、地图烧毁等效果。 原理十分简单，概括来说就是使用噪声纹理+透明度测试。我们使用噪声纹理采样的结果与某个阈值比较，如果小于阈值，就是用clip函数把对应的像素减掉，这些部分就对应了被“烧毁”的区域。镂空区域边缘的烧焦效果是将两种颜色混合，再用pow函数处理后，与原纹理颜色混合后的结果。 使用不同的噪声和纹理属性（材质面板上的Tiling和Offset值）都会">
 <meta property="og:type" content="article">
-<meta property="og:title" content="RisingMoon的博客">
+<meta property="og:title" content="使用噪声">
 <meta property="og:url" content="https://rising-moon.github.io/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E4%BA%94%E7%AB%A0%20%E4%BD%BF%E7%94%A8%E5%99%AA%E5%A3%B0%20%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="RisingMoon的博客">
-<meta property="og:description" content="使用噪声消融效果 消融效果常见于游戏中的角色死亡、地图烧毁等效果。 原理十分简单，概括来说就是使用噪声纹理+透明度测试。我们使用噪声纹理采样的结果与某个阈值比较，如果小于阈值，就是用clip函数把对应的像素减掉，这些部分就对应了被“烧毁”的区域。镂空区域边缘的烧焦效果是将两种颜色混合，再用pow函数处理后，与原纹理颜色混合后的结果。 使用不同的噪声和纹理属性（材质面板上的Tiling和Offset">
+<meta property="og:description" content="消融效果 消融效果常见于游戏中的角色死亡、地图烧毁等效果。 原理十分简单，概括来说就是使用噪声纹理+透明度测试。我们使用噪声纹理采样的结果与某个阈值比较，如果小于阈值，就是用clip函数把对应的像素减掉，这些部分就对应了被“烧毁”的区域。镂空区域边缘的烧焦效果是将两种颜色混合，再用pow函数处理后，与原纹理颜色混合后的结果。 使用不同的噪声和纹理属性（材质面板上的Tiling和Offset值）都会">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-03-31T10:09:28.300Z">
-<meta property="article:modified_time" content="2021-03-31T10:13:56.007Z">
+<meta property="article:modified_time" content="2022-03-01T10:21:04.360Z">
 <meta property="article:author" content="RisingMoon">
-<meta property="article:tag" content="Unity 渲染">
+<meta property="article:tag" content="《UnityShader入门精要》">
 <meta name="twitter:card" content="summary_large_image">
   
   
-  <title>RisingMoon的博客</title>
+  <title>使用噪声 - RisingMoon的博客</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
@@ -152,9 +152,9 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="">
+            <span class="h2" id="subtitle" title="使用噪声">
               
-                
+                使用噪声
               
             </span>
 
@@ -206,10 +206,10 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none"></h1>
+            <h1 style="display: none">使用噪声</h1>
             
             <div class="markdown-body">
-              <h1 id="使用噪声"><a href="#使用噪声" class="headerlink" title="使用噪声"></a>使用噪声</h1><h2 id="消融效果"><a href="#消融效果" class="headerlink" title="消融效果"></a>消融效果</h2><ul>
+              <h2 id="消融效果"><a href="#消融效果" class="headerlink" title="消融效果"></a>消融效果</h2><ul>
 <li><strong>消融</strong>效果常见于游戏中的角色死亡、地图烧毁等效果。</li>
 <li>原理十分简单，概括来说就是使用噪声纹理+透明度测试。我们使用噪声纹理采样的结果与某个阈值比较，如果小于阈值，就是用clip函数把对应的像素减掉，这些部分就对应了被“烧毁”的区域。镂空区域边缘的烧焦效果是将两种颜色混合，再用pow函数处理后，与原纹理颜色混合后的结果。</li>
 <li>使用不同的噪声和纹理属性（材质面板上的Tiling和Offset值）都会得到不同的消融效果。想要得到好的消融效果，也需要美术人员提供合适的噪声纹理来配合。</li>
@@ -224,6 +224,13 @@
             <div>
               <div class="post-metas mb-3">
                 
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/blog/tags/%E3%80%8AUnityShader%E5%85%A5%E9%97%A8%E7%B2%BE%E8%A6%81%E3%80%8B/">《UnityShader入门精要》</a>
+                    
+                  </div>
                 
               </div>
               
@@ -240,7 +247,7 @@
                     
                       <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0%20%E5%B1%8F%E5%B9%95%E5%90%8E%E5%A4%84%E7%90%86%E6%95%88%E6%9E%9C%20%E7%AC%94%E8%AE%B0/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile"></span>
+                        <span class="hidden-mobile">屏幕后处理效果</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -248,8 +255,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E5%9B%9B%E7%AB%A0%20%E9%9D%9E%E7%9C%9F%E5%AE%9E%E6%84%9F%E6%B8%B2%E6%9F%93%20%E7%AC%94%E8%AE%B0/">
-                        <span class="hidden-mobile"></span>
+                      <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E5%85%AD%E7%AB%A0%20Unity%E4%B8%AD%E7%9A%84%E6%B8%B2%E6%9F%93%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%20%E7%AC%94%E8%AE%B0/">
+                        <span class="hidden-mobile">Unity中的渲染优化技术</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

@@ -1,0 +1,618 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/img/favicon.png">
+  <link rel="icon" href="/blog/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="RisingMoon">
+  <meta name="keywords" content="Unity 渲染">
+  
+    <meta name="description" content="最简单的片元着色器 12#pragma vertex vert#pragma fragment frat 告诉Unity那个函数包括顶点着色器的代码，哪个函数包括片元着色器的代码。 123float4 vert(float4 v : POSITION) SV_POSITION&amp;#123;    return mul(UNITY_MATRIX_MVP,v);&amp;#125; vert 中包含了这个顶点的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="开始学习Unity Shader之旅">
+<meta property="og:url" content="https://rising-moon.github.io/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E4%BA%94%E7%AB%A0%20%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0Unity%20Shader%E4%B9%8B%E6%97%85%20%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="RisingMoon的博客">
+<meta property="og:description" content="最简单的片元着色器 12#pragma vertex vert#pragma fragment frat 告诉Unity那个函数包括顶点着色器的代码，哪个函数包括片元着色器的代码。 123float4 vert(float4 v : POSITION) SV_POSITION&amp;#123;    return mul(UNITY_MATRIX_MVP,v);&amp;#125; vert 中包含了这个顶点的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190404173615767.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNDg2NjM5,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2021-03-31T10:09:28.300Z">
+<meta property="article:modified_time" content="2022-03-01T10:21:50.382Z">
+<meta property="article:author" content="RisingMoon">
+<meta property="article:tag" content="《UnityShader入门精要》">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190404173615767.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNDg2NjM5,size_16,color_FFFFFF,t_70">
+  
+  
+  <title>开始学习Unity Shader之旅 - RisingMoon的博客</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/blog/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"rising-moon.github.io","root":"/blog/","version":"1.8.14","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":5},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/blog/local-search.xml"};
+  </script>
+  <script  src="/blog/js/utils.js" ></script>
+  <script  src="/blog/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 40vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/blog/">
+      <strong>RisingMoon的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/blog/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="开始学习Unity Shader之旅">
+              
+                开始学习Unity Shader之旅
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      RisingMoon
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-03-31 18:09" pubdate>
+        2021年3月31日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">开始学习Unity Shader之旅</h1>
+            
+            <div class="markdown-body">
+              <h2 id="最简单的片元着色器"><a href="#最简单的片元着色器" class="headerlink" title="最简单的片元着色器"></a>最简单的片元着色器</h2><p><img src="https://img-blog.csdnimg.cn/20190404173615767.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNDg2NjM5,size_16,color_FFFFFF,t_70" srcset="/blog/img/loading.gif" lazyload alt="最简单的片元着色器代码"></p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><pre><code class="hljs arduino"><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> vertex vert</span><br><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> fragment frat</span><br></code></pre></td></tr></table></figure>
+<p>告诉Unity那个函数包括顶点着色器的代码，哪个函数包括片元着色器的代码。</p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs scss">float4 <span class="hljs-built_in">vert</span>(float4 v : POSITION) SV_POSITION&#123;<br>    return <span class="hljs-built_in">mul</span>(UNITY_MATRIX_MVP,v);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>vert 中包含了这个顶点的位置，这是通过 POSITION 语义定义的。<br>输出值为裁切空间中的顶点坐标，这是通过 SV_POSITION 语义定义的。</p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs scss"><span class="hljs-comment">//使用一个结构体来定义顶点着色器的输入</span><br>	struct a2v &#123;<br>			<span class="hljs-comment">//POSITION 语义告诉 Unity，用模型空间的顶点坐标填充vertex变量</span><br>			float4 vertex : POSITION;<br>			<span class="hljs-comment">//NORMAL 语义告诉Unity，用模型空间的法线方向填充normal变量</span><br>			float3 noremal : NORMAL;<br>			<span class="hljs-comment">//TEXCOORD0语义告诉Unity，用模型的第一套纹理坐标填充texcoord变量</span><br>			float4 texcoord : TEXCOORD0;<br>	&#125;;<br><br>	float4 <span class="hljs-built_in">vert</span>(a2v v) : SV_POSITION &#123;<br>			return <span class="hljs-built_in">UnityObjectToClipPos</span>(v.vertex);<br>	&#125;<br></code></pre></td></tr></table></figure>
+<p>需要获取多个顶点信息，需要创建一个结构，并且作为参数传递给顶点着色器代码块。  </p>
+<h3 id="顶点着色器与片元着色器通信"><a href="#顶点着色器与片元着色器通信" class="headerlink" title="顶点着色器与片元着色器通信"></a>顶点着色器与片元着色器通信</h3><p>在顶点着色器代码块中，返回值输出一个与片元着色器参数类型相同的结构体。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function">v2f <span class="hljs-title">vert</span><span class="hljs-params">(a2v v)</span></span><br><span class="hljs-function"></span>&#123;<br>	v2f o;<br>	o.pos = <span class="hljs-built_in">UnityObjectToClipPos</span> (v.vertex);<br>	o.color = v.normal * <span class="hljs-number">0.5</span> + <span class="hljs-built_in">fixed3</span>(<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>);<br>	<span class="hljs-keyword">return</span> o;<br><br><span class="hljs-function">fixed4 <span class="hljs-title">frag</span><span class="hljs-params">(v2f i)</span> : SV_Target</span><br><span class="hljs-function">&#123;</span><br>	<span class="hljs-keyword">return</span> <span class="hljs-built_in">fixed4</span>(i.color, <span class="hljs-number">1.0</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="如何使用属性"><a href="#如何使用属性" class="headerlink" title="如何使用属性"></a>如何使用属性</h3><p>Properties语义块中可以定义一些参数由编辑器的材质面板调节。</p>
+<ul>
+<li>首先我们添加了Properties语义块，并在其中声明一个属性_Color，它的类型是Color，初始值是(1.0,1.0,1.0,1.0);</li>
+<li>为了在CG代码中访问他，我们需要在CG代码中提前定义一个变量，变量名称和类型必须与Properties语义块中的属性定义相匹配。  <h4 id="ShaderLab属性类型和CG变量类型的匹配关系"><a href="#ShaderLab属性类型和CG变量类型的匹配关系" class="headerlink" title="ShaderLab属性类型和CG变量类型的匹配关系"></a>ShaderLab属性类型和CG变量类型的匹配关系</h4></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>ShaderLab属性类型</th>
+<th>CG变量类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Color,Vector</td>
+<td>float4,half4,fixed4</td>
+</tr>
+<tr>
+<td>Range,Float</td>
+<td>float,half,fixed</td>
+</tr>
+<tr>
+<td>2D</td>
+<td>sampler2D</td>
+</tr>
+<tr>
+<td>Cube</td>
+<td>samplerCube</td>
+</tr>
+<tr>
+<td>3D</td>
+<td>sampler3D</td>
+</tr>
+</tbody></table>
+<h2 id="Unity-提供的内置文件和变量"><a href="#Unity-提供的内置文件和变量" class="headerlink" title="Unity 提供的内置文件和变量"></a>Unity 提供的内置文件和变量</h2><p>包含文件，类似c++中的头文件的一种。在Unity中它们的后缀为.cginc。使用#include可以把它们包含进来。<br>这些文件可以在<a target="_blank" rel="noopener" href="http://unity3d.com/cn/get-unity/download/archive">官方网站</a>上选择下载-&gt;内置着色器来直接下载。这些文件是非常好的参考资料，在我们想要学习内置着色器的实现或是寻找内置函数的实现时，都可以在这里找到内部实现。<br>我们可以直接在Unity的应用程序中找到<br>Mac:&#x2F;Application&#x2F;Unity&#x2F;Unity.app&#x2F;Content&#x2F;CGIncludes<br>Windows:Unity安装路径&#x2F;Data&#x2F;CGIncludes</p>
+<h4 id="Unity中一些常用的包含文件"><a href="#Unity中一些常用的包含文件" class="headerlink" title="Unity中一些常用的包含文件"></a>Unity中一些常用的包含文件</h4><table>
+<thead>
+<tr>
+<th>文件名</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>UnityCG.cginc</td>
+<td>包含了最常使用的帮助函数、宏和结构体</td>
+</tr>
+<tr>
+<td>UnityShaderVariables.cginc</td>
+<td>在编译Unity Shader时，会被自动包含进来。包含了许多内置的全局变量，如UNITY_MATRIX_MVP等</td>
+</tr>
+<tr>
+<td>Lighting.cginc</td>
+<td>包含了各种内置的光照模型，如果编写的是Surface Shader的话，会自动包含进来</td>
+</tr>
+<tr>
+<td>HLSLSupport.cginc</td>
+<td>在编译Unity Shader时，会自动包含进来。声明了很多用于跨平台编译的宏和定义</td>
+</tr>
+</tbody></table>
+<p>UnityCG.cginc 是最常接触的一个包含文件。</p>
+<h4 id="UnityCG-cginc中一些常用的结构体"><a href="#UnityCG-cginc中一些常用的结构体" class="headerlink" title="UnityCG.cginc中一些常用的结构体"></a>UnityCG.cginc中一些常用的结构体</h4><table>
+<thead>
+<tr>
+<th>名称</th>
+<th>描述</th>
+<th>包含的变量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>appdata_base</td>
+<td>可用于顶点着色器的输入</td>
+<td>顶点位置、顶点法线、第一组纹理坐标</td>
+</tr>
+<tr>
+<td>appdata_tan</td>
+<td>可用于顶点着色器的输入</td>
+<td>顶点位置、顶点切线、顶点法线、第一组纹理坐标</td>
+</tr>
+<tr>
+<td>appdata_full</td>
+<td>可用于顶点着色器的输入</td>
+<td>顶点位置、顶点切线、顶点法线、四组（或更多）纹理坐标</td>
+</tr>
+<tr>
+<td>appdata_img</td>
+<td>可用于顶点着色器的输入</td>
+<td>顶点位置、第一组纹理坐标</td>
+</tr>
+<tr>
+<td>v2f_img</td>
+<td>可用于顶点着色器的输出</td>
+<td>裁剪空间中的位置、纹理坐标</td>
+</tr>
+</tbody></table>
+<h4 id="UnityCG-cginc中一些常用的帮助函数"><a href="#UnityCG-cginc中一些常用的帮助函数" class="headerlink" title="UnityCG.cginc中一些常用的帮助函数"></a>UnityCG.cginc中一些常用的帮助函数</h4><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>float3 WorldSpaceViewDir(float4 v)</td>
+<td>输入一个模型空间中的顶点位置，返回世界空间中从该点到摄像机的观察方向</td>
+</tr>
+<tr>
+<td>float3 ObjSpaceViewDir(float4 v)</td>
+<td>输入一个模型空间中的顶点位置，返回模型空间中从该点到摄像机的观察方向</td>
+</tr>
+<tr>
+<td>float3 WorldSpaceLightDir(float4 v)</td>
+<td>仅可用于前向渲染。输入一个模型空间中的额顶点位置，返回世界空间中从该点到光源的光照方向。没有被归一化。</td>
+</tr>
+<tr>
+<td>float3 ObjSpaceLightDir(float4 v)</td>
+<td>仅可用于前向渲染中。输入一个模型空间中的顶点位置，返回模型空间中从该点到光源的光照方向。没有被归一化。</td>
+</tr>
+<tr>
+<td>float3 UnityObjectToWorldNormal(float3 norm)</td>
+<td>把法线方向从模型空间转换到世界空间中</td>
+</tr>
+<tr>
+<td>float3 UnityObjectToWorldDir(in float3 dir)</td>
+<td>把矢量方向从模型空间变换到世界空间中</td>
+</tr>
+<tr>
+<td>float3 UnityWorldToObjectDit(float3 dir)</td>
+<td>把矢量方向从世界空间变换到模型空间中</td>
+</tr>
+</tbody></table>
+<h2 id="Unity-提供的CG-x2F-HLSL语义"><a href="#Unity-提供的CG-x2F-HLSL语义" class="headerlink" title="Unity 提供的CG&#x2F;HLSL语义"></a>Unity 提供的CG&#x2F;HLSL语义</h2><h3 id="什么是语义"><a href="#什么是语义" class="headerlink" title="什么是语义"></a>什么是语义</h3><p>语义可以让Shader知道从哪里读取数据，并把数据输出到哪<br>之前代码中的POSITION NORMAL SV_POSIONT 等就是语义</p>
+<h3 id="Unity-支持的语义"><a href="#Unity-支持的语义" class="headerlink" title="Unity 支持的语义"></a>Unity 支持的语义</h3><h4 id="从应用阶段传递模型数据给顶点着色器时Unity支持的常用语义"><a href="#从应用阶段传递模型数据给顶点着色器时Unity支持的常用语义" class="headerlink" title="从应用阶段传递模型数据给顶点着色器时Unity支持的常用语义"></a>从应用阶段传递模型数据给顶点着色器时Unity支持的常用语义</h4><table>
+<thead>
+<tr>
+<th>语义</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>POSITION</td>
+<td>模型空间中的顶点位置，通常是float4类型</td>
+</tr>
+<tr>
+<td>NORMAL</td>
+<td>顶点法线，通常是float3类型</td>
+</tr>
+<tr>
+<td>TANGENT</td>
+<td>顶点切线，通常是float4类型</td>
+</tr>
+<tr>
+<td>TEXCOORDn，如TEXCOORD0、TEXCOORD1</td>
+<td>该顶点的纹理坐标，TEXCOORD0表示第一组纹理坐标，以此类推。通常是float2或float4类型</td>
+</tr>
+<tr>
+<td>COLOR</td>
+<td>顶点颜色，通常是fixed4或float4类型</td>
+</tr>
+</tbody></table>
+<h4 id="从顶点着色器传递数据给片元着色器时Unity使用的常用语义"><a href="#从顶点着色器传递数据给片元着色器时Unity使用的常用语义" class="headerlink" title="从顶点着色器传递数据给片元着色器时Unity使用的常用语义"></a>从顶点着色器传递数据给片元着色器时Unity使用的常用语义</h4><table>
+<thead>
+<tr>
+<th>语义</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SV_POSITION</td>
+<td>裁剪空间中的坐标顶点，结构体中必须包含一个用该语义修饰的变量。等同于DirectX9中的POSITION，但最好使用SV_POSITION</td>
+</tr>
+<tr>
+<td>COLOR0</td>
+<td>通常用于输出第一组顶点颜色，但不是必须的</td>
+</tr>
+<tr>
+<td>COLOR1</td>
+<td>通常用于输出第二组顶点颜色，但不是必须的</td>
+</tr>
+<tr>
+<td>TEXCOORD0~TEXCOORD7</td>
+<td>通常用于输出纹理坐标，但不是必须的</td>
+</tr>
+</tbody></table>
+<h4 id="片元着色器输出时Unity支持的常用语义"><a href="#片元着色器输出时Unity支持的常用语义" class="headerlink" title="片元着色器输出时Unity支持的常用语义"></a>片元着色器输出时Unity支持的常用语义</h4><table>
+<thead>
+<tr>
+<th>语义</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SV_Target</td>
+<td>输出值将会存储到渲染目标(render target)中。等同于DirexX 9中的COLOR语义，但最好使用SV_Target</td>
+</tr>
+</tbody></table>
+<h2 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h2><p>可以将法线，切线向量值对应到RGB颜色值，然后在画面颜色显示中来判断。<br>使用Unity中的帧调试器(Window-&gt;Frame Debugger)可以更方便进行调试。</p>
+<h3 id="帧调试器"><a href="#帧调试器" class="headerlink" title="帧调试器"></a>帧调试器</h3><ul>
+<li>最上面的区域可以控制帧调试器开关，开启时滑动条可以重放渲染事件。如果选中的Draw Call是对一个纹理的渲染操作，这个渲染纹理就会显示在Game视图中。而且右侧面板上方可以选择只显示R、G、B、A之一。</li>
+<li>左侧的区域显示了所有事件的树状图，这个树状图中，每个叶子节点就是一个事件。我们可以从事件的命名了解这个事件的操作，例如Draw开头的事件通常就是一次Draw Call。</li>
+<li>右侧窗口显示事件的细节，例如几何图形的细节以及使用了哪个shader。</li>
+</ul>
+<h4 id="如果想要得到更多信息，还是需要使用外部工具。"><a href="#如果想要得到更多信息，还是需要使用外部工具。" class="headerlink" title="如果想要得到更多信息，还是需要使用外部工具。"></a>如果想要得到更多信息，还是需要使用外部工具。</h4><h2 id="渲染平台的差异"><a href="#渲染平台的差异" class="headerlink" title="渲染平台的差异"></a>渲染平台的差异</h2><p>Unity的有点之一就是跨平台性很强，写一份代码就可以在多平台上运行。但绝大多数情况下，Unity为我们隐藏了这些细节，但有时候我们还是需要自己处理。</p>
+<h3 id="渲染纹理的坐标差异"><a href="#渲染纹理的坐标差异" class="headerlink" title="渲染纹理的坐标差异"></a>渲染纹理的坐标差异</h3><ul>
+<li>OpenGL和DirectX中的屏幕坐标存在差异，OpenGL中坐标(0,0)点在左下角，而DirectX中为左上角。<br>大多数情况下，这并不会对我们造成影响。当我们开启了抗锯齿并且需要处理多张渲染图像时。在DirectX中，我们就需要在顶点着色器中翻转某些渲染纹理，例如：</li>
+</ul>
+<figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs sqf"><span class="hljs-meta">#if UNITY_UV_STARTS_AT_TOP</span><br><span class="hljs-keyword">if</span>(<span class="hljs-variable">_MainTex_TexelSize</span>.y &lt; <span class="hljs-number">0</span>)&#123;<br>    uv.y = <span class="hljs-number">1</span> - uv.y;<br>&#125;<br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br></code></pre></td></tr></table></figure>
+<p>其中UNITY_UV_STARTS_AT_TOP用来判断当前平台是不是DirectX类型的平台。通过判断_MainTex_TexelSize.y是否小于0来判断是否打开了抗锯齿。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/blog/tags/%E3%80%8AUnityShader%E5%85%A5%E9%97%A8%E7%B2%BE%E8%A6%81%E3%80%8B/">《UnityShader入门精要》</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E4%BA%8C%E7%AB%A0%20%E6%B8%B2%E6%9F%93%E6%B5%81%E6%B0%B4%E7%BA%BF%20%E7%AC%94%E8%AE%B0/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">渲染流水线</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E9%80%8F%E6%98%8E%E6%95%88%E6%9E%9C%20%E7%AC%94%E8%AE%B0/">
+                        <span class="hidden-mobile">透明效果</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/blog/js/events.js" ></script>
+<script  src="/blog/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/blog/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/blog/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/blog/js/boot.js" ></script>
+
+
+</body>
+</html>

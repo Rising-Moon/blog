@@ -16,21 +16,21 @@
   <meta name="author" content="RisingMoon">
   <meta name="keywords" content="Unity 渲染">
   
-    <meta name="description" content="使用深度法线和纹理获取深度和法线纹理原理深度纹理 就是一张渲染纹理，存储的像素值是高精度的深度值。 范围是[0,1]，通常是非线性分布的。 深度值来自于顶点变换后得到的归一化的设备坐标 顶点转换到齐次裁剪空间后，z坐标就是它的深度值。但是z分量的范围是[-1,1]所以我们为了能将其存储在图像中，使用：d &#x3D; 0.5*z + 0.5将其变为[0,1]范围中。 Unity中深度纹理可以来自于">
+    <meta name="description" content="获取深度和法线纹理原理深度纹理 就是一张渲染纹理，存储的像素值是高精度的深度值。 范围是[0,1]，通常是非线性分布的。 深度值来自于顶点变换后得到的归一化的设备坐标 顶点转换到齐次裁剪空间后，z坐标就是它的深度值。但是z分量的范围是[-1,1]所以我们为了能将其存储在图像中，使用：d &#x3D; 0.5*z + 0.5将其变为[0,1]范围中。 Unity中深度纹理可以来自于真正的深度缓存，也">
 <meta property="og:type" content="article">
-<meta property="og:title" content="RisingMoon的博客">
+<meta property="og:title" content="使用深度法线和纹理">
 <meta property="og:url" content="https://rising-moon.github.io/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0%20%E4%BD%BF%E7%94%A8%E6%B7%B1%E5%BA%A6%E6%B3%95%E7%BA%BF%E5%92%8C%E7%BA%B9%E7%90%86%20%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="RisingMoon的博客">
-<meta property="og:description" content="使用深度法线和纹理获取深度和法线纹理原理深度纹理 就是一张渲染纹理，存储的像素值是高精度的深度值。 范围是[0,1]，通常是非线性分布的。 深度值来自于顶点变换后得到的归一化的设备坐标 顶点转换到齐次裁剪空间后，z坐标就是它的深度值。但是z分量的范围是[-1,1]所以我们为了能将其存储在图像中，使用：d &#x3D; 0.5*z + 0.5将其变为[0,1]范围中。 Unity中深度纹理可以来自于">
+<meta property="og:description" content="获取深度和法线纹理原理深度纹理 就是一张渲染纹理，存储的像素值是高精度的深度值。 范围是[0,1]，通常是非线性分布的。 深度值来自于顶点变换后得到的归一化的设备坐标 顶点转换到齐次裁剪空间后，z坐标就是它的深度值。但是z分量的范围是[-1,1]所以我们为了能将其存储在图像中，使用：d &#x3D; 0.5*z + 0.5将其变为[0,1]范围中。 Unity中深度纹理可以来自于真正的深度缓存，也">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-03-31T10:09:28.300Z">
-<meta property="article:modified_time" content="2021-03-31T10:12:32.346Z">
+<meta property="article:modified_time" content="2022-03-01T10:20:32.738Z">
 <meta property="article:author" content="RisingMoon">
-<meta property="article:tag" content="Unity 渲染">
+<meta property="article:tag" content="《UnityShader入门精要》">
 <meta name="twitter:card" content="summary_large_image">
   
   
-  <title>RisingMoon的博客</title>
+  <title>使用深度法线和纹理 - RisingMoon的博客</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
@@ -152,9 +152,9 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="">
+            <span class="h2" id="subtitle" title="使用深度法线和纹理">
               
-                
+                使用深度法线和纹理
               
             </span>
 
@@ -206,10 +206,10 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none"></h1>
+            <h1 style="display: none">使用深度法线和纹理</h1>
             
             <div class="markdown-body">
-              <h1 id="使用深度法线和纹理"><a href="#使用深度法线和纹理" class="headerlink" title="使用深度法线和纹理"></a>使用深度法线和纹理</h1><h2 id="获取深度和法线纹理"><a href="#获取深度和法线纹理" class="headerlink" title="获取深度和法线纹理"></a>获取深度和法线纹理</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><h4 id="深度纹理"><a href="#深度纹理" class="headerlink" title="深度纹理"></a>深度纹理</h4><ul>
+              <h2 id="获取深度和法线纹理"><a href="#获取深度和法线纹理" class="headerlink" title="获取深度和法线纹理"></a>获取深度和法线纹理</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><h4 id="深度纹理"><a href="#深度纹理" class="headerlink" title="深度纹理"></a>深度纹理</h4><ul>
 <li>就是一张渲染纹理，存储的像素值是高精度的深度值。</li>
 <li>范围是[0,1]，通常是非线性分布的。</li>
 <li>深度值来自于顶点变换后得到的归一化的设备坐标</li>
@@ -271,6 +271,13 @@
               <div class="post-metas mb-3">
                 
                 
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/blog/tags/%E3%80%8AUnityShader%E5%85%A5%E9%97%A8%E7%B2%BE%E8%A6%81%E3%80%8B/">《UnityShader入门精要》</a>
+                    
+                  </div>
+                
               </div>
               
                 <p class="note note-warning">
@@ -284,9 +291,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E4%BA%8C%E7%AB%A0%20%E6%B8%B2%E6%9F%93%E6%B5%81%E6%B0%B4%E7%BA%BF%20%E7%AC%94%E8%AE%B0/">
+                      <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%85%AD%E7%AB%A0%20Unity%E4%B8%AD%E7%9A%84%E5%9F%BA%E7%A1%80%E5%85%89%E7%85%A7%20%E7%AC%94%E8%AE%B0/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">渲染流水线</span>
+                        <span class="hidden-mobile">Unity 中的基础光照</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -294,8 +301,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0%20%E5%B1%8F%E5%B9%95%E5%90%8E%E5%A4%84%E7%90%86%E6%95%88%E6%9E%9C%20%E7%AC%94%E8%AE%B0/">
-                        <span class="hidden-mobile"></span>
+                      <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0%20%E8%AE%A9%E7%94%BB%E9%9D%A2%E5%8A%A8%E8%B5%B7%E6%9D%A5/">
+                        <span class="hidden-mobile">让画面动起来</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
