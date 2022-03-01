@@ -16,21 +16,23 @@
   <meta name="author" content="RisingMoon">
   <meta name="keywords" content="Unity 渲染">
   
-    <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+    <meta name="description" content="高级纹理立方体纹理 环境映射的一种实现方式。 包含六张图像，对应立方体六个面。 纹理采样需要提供一个三维坐标，坐标作为一个矢量从立方体中心出发，采样结果就是矢量与立方体表面交点的信息。 优点：实现简单，得到的效果好。 缺点：引入新的物体、光源，或者物体发生移动时，需要重新生成。 常用与天空盒以及环境映射。天空盒 模拟天空或室内等背景 Unity中，天空盒是在所有不透明物体之后渲染的。用于环境映射的">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="https://rising-moon.github.io/blog/2022/02/25/hello-world/index.html">
+<meta property="og:title" content="RisingMoon的博客">
+<meta property="og:url" content="https://rising-moon.github.io/blog/2021/03/31/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E7%AB%A0%20%E9%AB%98%E7%BA%A7%E7%BA%B9%E7%90%86%20%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="RisingMoon的博客">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta property="og:description" content="高级纹理立方体纹理 环境映射的一种实现方式。 包含六张图像，对应立方体六个面。 纹理采样需要提供一个三维坐标，坐标作为一个矢量从立方体中心出发，采样结果就是矢量与立方体表面交点的信息。 优点：实现简单，得到的效果好。 缺点：引入新的物体、光源，或者物体发生移动时，需要重新生成。 常用与天空盒以及环境映射。天空盒 模拟天空或室内等背景 Unity中，天空盒是在所有不透明物体之后渲染的。用于环境映射的">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-02-25T08:26:43.882Z">
-<meta property="article:modified_time" content="2022-02-25T08:26:43.882Z">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190426220743848.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNDg2NjM5,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2021-03-31T10:09:28.300Z">
+<meta property="article:modified_time" content="2021-03-31T10:14:27.863Z">
 <meta property="article:author" content="RisingMoon">
 <meta property="article:tag" content="Unity 渲染">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190426220743848.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNDg2NjM5,size_16,color_FFFFFF,t_70">
   
   
-  <title>Hello World - RisingMoon的博客</title>
+  <title>RisingMoon的博客</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
@@ -176,7 +178,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="Hello World">
+            <span class="h2" id="subtitle" title="">
               
             </span>
 
@@ -186,8 +188,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2022-02-25 16:26" pubdate>
-        2022年2月25日 下午
+      <time datetime="2021-03-31 18:09" pubdate>
+        2021年3月31日 晚上
       </time>
     </span>
   
@@ -197,7 +199,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      367 字
+      1.6k 字
     </span>
   
 
@@ -206,7 +208,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      4 分钟
+      13 分钟
     </span>
   
 
@@ -235,22 +237,60 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Hello World</h1>
+            <h1 style="display: none"></h1>
             
             <div class="markdown-body">
-              <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><pre><code class="hljs bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span><br></code></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo server<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo generate<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo deploy<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+              <h1 id="高级纹理"><a href="#高级纹理" class="headerlink" title="高级纹理"></a>高级纹理</h1><h2 id="立方体纹理"><a href="#立方体纹理" class="headerlink" title="立方体纹理"></a>立方体纹理</h2><ul>
+<li><strong>环境映射</strong>的一种实现方式。</li>
+<li>包含六张图像，对应立方体六个面。</li>
+<li>纹理采样需要提供一个三维坐标，坐标作为一个矢量从立方体中心出发，采样结果就是矢量与立方体表面交点的信息。</li>
+<li>优点：实现简单，得到的效果好。</li>
+<li>缺点：引入新的物体、光源，或者物体发生移动时，需要重新生成。</li>
+<li>常用与天空盒以及环境映射。<h3 id="天空盒"><a href="#天空盒" class="headerlink" title="天空盒"></a>天空盒</h3></li>
+<li>模拟天空或室内等背景</li>
+<li>Unity中，天空盒是在所有不透明物体之后渲染的。<h3 id="用于环境映射的立方体纹理"><a href="#用于环境映射的立方体纹理" class="headerlink" title="用于环境映射的立方体纹理"></a>用于环境映射的立方体纹理</h3></li>
+<li>Unity5中创建用于环境映射的立方体纹理的方法：</li>
+</ul>
+<ol>
+<li>直接由特殊布局的纹理生成<br>需要一张具有特殊布局，类似立方体展开的交叉布局、全景布局。把纹理的Texture Type设置为Cubemap即可。</li>
+<li>手动创建一个Cubemap资源，再给它添加6张图<br>与天空盒材质创建相同。Unity5后建议使用第一种方式，方便压缩、边缘修正、光滑反射和HDR</li>
+<li>由脚本生成。<br>前两种方法需要提供提前准备好的纹理图像。Unity中可以使用<strong>Camera.RenderToCubemap</strong>函数把从任意位置观察到的图像存储到6张图像中，从而创建出对应位置上的立方体纹理。</li>
+</ol>
+<h4 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h4><ul>
+<li>因为光线可逆，我们通过视角方向（指向表面）和表面法线可以计算出入射光线的方向，通过这个方向对纹理进行采样就可以得到反射信息。</li>
+</ul>
+<h4 id="折射"><a href="#折射" class="headerlink" title="折射"></a>折射</h4><ul>
+<li>当光线从一种介质斜射入另一种介质时，传播方向一般会发生改变。</li>
+<li>给定入射角时，我们可以使用<strong>斯涅尔定律</strong>来计算反射角。</li>
+<li>光从介质1沿着和表面法线夹角为θ<sub>1</sub>的方向斜射入介质2时，我们可以使用如下公式计算折射光线与法线的夹角θ<sub>2</sub>：</li>
+</ul>
+<p><strong>η<sub>1</sub>sinθ<sub>1</sub>&#x3D;η<sub>2</sub>sinθ<sub>2</sub></strong><br>η<sub>1</sub>、η<sub>2</sub>分别为两个介质的<strong>折射率（index of refraction）</strong><br><img src="https://img-blog.csdnimg.cn/20190426220743848.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNDg2NjM5,size_16,color_FFFFFF,t_70" srcset="/blog/img/loading.gif" lazyload alt="斯涅尔定律图解">  </p>
+<h4 id="菲涅尔反射"><a href="#菲涅尔反射" class="headerlink" title="菲涅尔反射"></a>菲涅尔反射</h4><ul>
+<li>根据视角方向控制反射程度。  </li>
+<li>关于菲涅尔反射，建议看看这个网站：<br><a target="_blank" rel="noopener" href="http://gad.qq.com/program/translateview/7195431">万物皆有菲涅尔反射</a>  </li>
+<li>Schilck菲涅尔近似等式：<br>F<sub>schilk</sub>(<strong>v</strong>,<strong>n</strong>)&#x3D;F<sub>0</sub>+(1-F<sub>0</sub>)(1-<strong>v</strong>·<strong>n</strong>)<sup>5</sup><br>其中F<sub>0</sub>为反射系数，用于控制反射强度，<strong>v</strong>是视角方向，<strong>n</strong>是表面法线。</li>
+<li>Empricial 菲涅尔近似等式：<br>F<sub>Empricial</sub>(<strong>v</strong>,<strong>n</strong>)&#x3D;max(0,min(1,bias+scale×(1-<strong>v</strong>·<strong>n</strong>)<sup>power</sup>))<br>其中bias、scale和power都是控制项。</li>
+</ul>
+<h2 id="渲染纹理"><a href="#渲染纹理" class="headerlink" title="渲染纹理"></a>渲染纹理</h2><ul>
+<li>之前学习中，一个摄像机的渲染结果会输出到颜色缓冲中。现在GPU允许我们把整个三维场景渲染到一个中间缓冲中，即<strong>渲染目标纹理（Render Target Texture，RTT）</strong>，而不是传统的帧缓冲或后备缓冲。</li>
+<li>与之相关的是<strong>多冲渲染目标（Multiple Render Target，MRT）</strong>，允许我们把场景同时渲染到多个目标纹理中。</li>
+<li>Unity专门定义了一种纹理类型——<strong>渲染纹理（Render Texture）</strong></li>
+<li>Unity中有两种方式使用渲染纹理：</li>
+</ul>
+<ol>
+<li>在Project目录下创建一个渲染纹理，把某个摄像机的渲染目标设置成该渲染纹理，这样摄像机的渲染结果会实时更新到渲染纹理中，而不会显示在屏幕上。</li>
+<li>屏幕后处理时，使用GrabPass命令或OnRenderImage函数来获取当前屏幕图像，Unity会把这个屏幕图像放到一张和屏幕分辨率等同的渲染纹理中，之后我们可以在自定义的Pass中把它们当做普通的纹理来处理，从而实现各种屏幕特效。</li>
+</ol>
+<h3 id="玻璃效果"><a href="#玻璃效果" class="headerlink" title="玻璃效果"></a>玻璃效果</h3><ul>
+<li>Unity shader中我们可以使用一种特殊的Pass来完成获取屏幕图像的目的，这就是GrabPass。</li>
+<li>在shader中定义一个GrabPass后，Unity会把当前屏幕的截图保存在一张纹理中，我们可以再之后的Pass中访问它。</li>
+<li>使用GrabPass时，需要额外小心<strong>物体的渲染队列设置</strong>。</li>
+<li>我们需要把物体的渲染队列设置为透明队列（”Queue” &#x3D; “Tansparent”）。</li>
+</ul>
+<h2 id="程序纹理"><a href="#程序纹理" class="headerlink" title="程序纹理"></a>程序纹理</h2><ul>
+<li>指的是由计算机生成的图像。</li>
+<li>好处在于可以使用各种参数来控制纹理的外观。</li>
+</ul>
 
             </div>
             <hr>
@@ -271,11 +311,17 @@
                   <article class="post-prev col-6">
                     
                     
+                      <a href="/blog/2021/03/31/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E5%9B%9B%E7%AB%A0%20%E9%9D%9E%E7%9C%9F%E5%AE%9E%E6%84%9F%E6%B8%B2%E6%9F%93%20%E7%AC%94%E8%AE%B0/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/blog/2021/03/31/Unity%20Shader%20%E7%AC%AC%E4%B8%83%E7%AB%A0%20%E5%9F%BA%E7%A1%80%E7%BA%B9%E7%90%86%20%E7%AC%94%E8%AE%B0/">
+                      <a href="/blog/2021/03/31/Unity%20Shader%20%E7%AC%AC%E5%9B%9B%E7%AB%A0%20%E5%AD%A6%E4%B9%A0Shader%E6%89%80%E9%9C%80%E7%9A%84%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/">
                         <span class="hidden-mobile"></span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
