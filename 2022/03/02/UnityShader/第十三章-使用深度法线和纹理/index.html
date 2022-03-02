@@ -1,0 +1,493 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/img/avatar.png">
+  <link rel="icon" href="/blog/img/avatar.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="RisingMoon">
+  <meta name="keywords" content="Unity 渲染">
+  
+    <meta name="description" content="获取深度和法线纹理原理深度纹理 就是一张渲染纹理，存储的像素值是高精度的深度值。 范围是[0,1]，通常是非线性分布的。 深度值来自于顶点变换后得到的归一化的设备坐标 顶点转换到齐次裁剪空间后，z坐标就是它的深度值。但是z分量的范围是[-1,1]所以我们为了能将其存储在图像中，使用：d &#x3D; 0.5*z + 0.5将其变为[0,1]范围中。 Unity中深度纹理可以来自于真正的深度缓存，也">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第十三章-使用深度法线和纹理">
+<meta property="og:url" content="https://rising-moon.github.io/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-%E4%BD%BF%E7%94%A8%E6%B7%B1%E5%BA%A6%E6%B3%95%E7%BA%BF%E5%92%8C%E7%BA%B9%E7%90%86/index.html">
+<meta property="og:site_name" content="RisingMoon的博客">
+<meta property="og:description" content="获取深度和法线纹理原理深度纹理 就是一张渲染纹理，存储的像素值是高精度的深度值。 范围是[0,1]，通常是非线性分布的。 深度值来自于顶点变换后得到的归一化的设备坐标 顶点转换到齐次裁剪空间后，z坐标就是它的深度值。但是z分量的范围是[-1,1]所以我们为了能将其存储在图像中，使用：d &#x3D; 0.5*z + 0.5将其变为[0,1]范围中。 Unity中深度纹理可以来自于真正的深度缓存，也">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-03-02T04:00:11.000Z">
+<meta property="article:modified_time" content="2022-03-02T11:01:47.240Z">
+<meta property="article:author" content="RisingMoon">
+<meta property="article:tag" content="Unity 渲染">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>第十三章-使用深度法线和纹理 - RisingMoon的博客</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/blog/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"rising-moon.github.io","root":"/blog/","version":"1.8.14","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":5},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/blog/local-search.xml"};
+  </script>
+  <script  src="/blog/js/utils.js" ></script>
+  <script  src="/blog/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 40vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/blog/">
+      <strong>RisingMoon的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/blog/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="第十三章-使用深度法线和纹理">
+              
+                第十三章-使用深度法线和纹理
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      RisingMoon
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-03-02 12:00" pubdate>
+        2022年3月2日 中午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">第十三章-使用深度法线和纹理</h1>
+            
+            <div class="markdown-body">
+              <h2 id="获取深度和法线纹理"><a href="#获取深度和法线纹理" class="headerlink" title="获取深度和法线纹理"></a>获取深度和法线纹理</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><h4 id="深度纹理"><a href="#深度纹理" class="headerlink" title="深度纹理"></a>深度纹理</h4><ul>
+<li>就是一张渲染纹理，存储的像素值是高精度的深度值。</li>
+<li>范围是[0,1]，通常是非线性分布的。</li>
+<li>深度值来自于顶点变换后得到的归一化的设备坐标</li>
+<li>顶点转换到齐次裁剪空间后，z坐标就是它的深度值。但是z分量的范围是[-1,1]所以我们为了能将其存储在图像中，使用：<br>d &#x3D; 0.5*z + 0.5<br>将其变为[0,1]范围中。</li>
+<li>Unity中深度纹理可以来自于真正的深度缓存，也可以由单独一个Pass渲染获得，这取决于渲染路径和硬件。</li>
+<li>使用延迟渲染路径可以直接从G-buffer中获得深度信息。</li>
+<li>当无法直接获取深度缓存时，深度和法线纹理是通过一个单独的Pass渲染获得。</li>
+<li>具体实现是，Unity会使用<strong>着色器替换</strong>技术选择渲染类型为Opaque的物体，判断它使用的渲染队列是否小于2500（包括Background、Geometry和AlphaTest），如果满足条件就把他渲染到深度和法线纹理中。</li>
+<li>在Unity中，我们可以选择让一个摄像机生成一张深度纹理或是一张深度+法线纹理。</li>
+<li>选择前者时，Unity会直接获得深度缓存或者按之前讲到的着色器替换技术，使用物体投射阴影时使用的Pass来获取深度纹理。如果shader中不包含这样的pass，那么物体就不会出现在深度纹理中。深度纹理的精度通常是24位或者16位，这取决于深度缓存的精度。</li>
+<li>如果选择生成一张深度+法线纹理，Unity会创建一张和屏幕分辨率相同、精度为32位的纹理，其中观察空间下的法线信息会被编码进纹理的R和G通道，深度信息会被编码进B和A通道。法线信息在延迟渲染路径下很容易获取，将法线和深度缓存合并即可。在前向渲染中，默认情况下不会创建法线缓存，因此Unity底层使用一个单独的Pass把整个场景再次渲染一遍来完成。这个Pass被包含在Unity内置的一个Unity Shader中，可以在builtin_shaders-xxx&#x2F;DefaultResources&#x2F;Camera-DepthNormalTexture.shader文件中找到这个用于渲染深度和法线信息的Pass。</li>
+</ul>
+<h3 id="如何获取"><a href="#如何获取" class="headerlink" title="如何获取"></a>如何获取</h3><ul>
+<li>获取深度纹理十分简单，在脚本中设置摄像机的depthTextureMode来完成：<figure class="highlight ini"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">camera.depthTextureMode</span> = DepthTextureMode.Depth<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure></li>
+<li>之后在shader中声明_CameraDepthTexture变量来访问它。</li>
+<li>同理，获取深度+法线纹理，我们只需要在代码中设置：<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">camera.depthTextureMode</span> = DepthTextureMode.DepthNormals<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure></li>
+<li>之后在shader中声明_CameraDepthNormalTexture变量来访问它。</li>
+<li>通常情况下，我们直接使用tex2D对纹理进行采样即可，但在某些平台上（例如PS3和PS2），我们需要一些特殊处理。Unity为我们提供了一个统一的宏，SAMPLE_DEPTH_TEXTURE来处理这些平台差异。<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs reasonml"><span class="hljs-built_in">float</span> d = <span class="hljs-constructor">SAMPLE_DEPTH_TEXTURE(<span class="hljs-params">_CameraDepthTexture</span>,<span class="hljs-params">i</span>.<span class="hljs-params">uv</span>)</span>;<br></code></pre></td></tr></table></figure></li>
+<li>i.uv是一个float2类型的变量，对应了当前像素的纹理坐标。</li>
+<li>类似的宏还有SAMPLE_DEPTH_TEXTURE_PROJ，同样接受两个参数，第二个参数是一个float3或者float4类型的纹理坐标，前两个分量是uv坐标，会使用前两个分量除以第三个分量再进行采样，如果提供第四个分量，会再进行一次比较，通常用于阴影的实现中。<br>例如：<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs reasonml"><span class="hljs-built_in">float</span> d = <span class="hljs-constructor">SAMPLE_DEPTH_TEXTURE_PROJ(<span class="hljs-params">_CameraDepthTexture</span>,UNITY_PROJ_COORD(<span class="hljs-params">i</span>.<span class="hljs-params">srcPos</span>)</span>);<br></code></pre></td></tr></table></figure></li>
+<li>i.srcPos是顶点着色器中通过调用ComputerScreenPos(o.pos)得到的屏幕坐标。</li>
+<li>取样得到的z分量是非线性的，我们需要把它转换到线性空间中，例如视角空间。</li>
+<li>齐次裁剪空间转换到视角空间的方法可以由视角空间到齐次裁剪空间的公式逆推得到。</li>
+<li>Unity提供了两个辅助函数来为我们进行上述的计算过过程：LinearEyeDepth和Linear01Depth。</li>
+<li><strong>LinearEyeDepth</strong>负责把采样获得的深度值转换到观察空间下的深度值</li>
+<li><strong>Linear01Dept</strong>h则会返回一个范围在[0,1]的线性深度值。</li>
+<li>两个函数使用了内置变量_ZBufferParams变量来得到远近裁剪平面的距离。</li>
+<li>如果我们需要获得深度+法线纹理，可以tex2D函数对_CameraDepthNormalTexture进行采样。</li>
+<li>Unity提供了辅助函数DecodeDeothNormal对采样结果进行解码：<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">inline void <span class="hljs-constructor">DecodeDepthNormal(<span class="hljs-params">float4</span> <span class="hljs-params">enc</span>,<span class="hljs-params">out</span> <span class="hljs-params">float</span> <span class="hljs-params">depth</span>,<span class="hljs-params">out</span> <span class="hljs-params">float3</span> <span class="hljs-params">normal</span>)</span>&#123;<br>    depth = <span class="hljs-constructor">DecodeFloatRG(<span class="hljs-params">enc</span>.<span class="hljs-params">zw</span>)</span>;<br>    normal = <span class="hljs-constructor">DecodeViewNormalStereo(<span class="hljs-params">enc</span>)</span>;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li>第一个参数是对深度法线纹理的采样结果，这个结果是Unity对深度法线信息进行了编码后的结果，xy分量存储的是视角空间下的法线信息，而深度信息被编码进了zw分量。调用辅助函数后就可以得到解码后的深度和法线信息了。这个深度值是范围在[0,1]的线性深度值（与单独的深度纹理中存储的深度值不同），得到的法线则是视角空间下的法线方向。同样，我们也可以通过调用DecodeFloatRG和DecodeViewNormalStereo来解码深度+法线纹理中的深度和法线信息。</li>
+</ul>
+<h3 id="查看深度和法线纹理"><a href="#查看深度和法线纹理" class="headerlink" title="查看深度和法线纹理"></a>查看深度和法线纹理</h3><ul>
+<li>在设置了摄像机渲染深度和法线纹理后可以在Frame Debug中查看。</li>
+<li>单独深度纹理展示的是非线性空间下的深度值；深度加法线纹理展示的是编码以后的结果。</li>
+<li>我们可以编写shader来显示线性空间或者解码后的结果。</li>
+</ul>
+<h2 id="再谈运动模糊"><a href="#再谈运动模糊" class="headerlink" title="再谈运动模糊"></a>再谈运动模糊</h2><ul>
+<li>运动模糊更广泛的技术是使用速度映射图。速度映射图存储了每个像素的速度，然后使用这个速度来决定模糊的大小和方向。</li>
+<li>速度缓冲生成的方法很多。一种是把场景中所有物体速度渲染到一张纹理中。这种方法缺点是在于需要修改场景中所有物体的shader代码，使其添加计算速度的代码并输出到一个渲染纹理中。</li>
+<li>《GPU Gems3》中介绍了一种生成速度映射图的方法。这种方法利用深度纹理在片元着色器中为每个像素计算其在世界空间下的位置，通过使用当前视角*投影矩阵的逆矩阵对NDC下的顶点坐标进行变换得到的。用相同方法得到前一帧中该位置的NDC坐标。然后对其求差值，生成该像素的速度。优点是在屏幕后处理时完成了整个效果的模拟；缺点是需要在片元着色器中进行两次矩阵乘法的操作，对性能有所影响。</li>
+</ul>
+<h2 id="全局雾效"><a href="#全局雾效" class="headerlink" title="全局雾效"></a>全局雾效</h2><ul>
+<li><strong>雾效</strong>是游戏里经常使用的一种效果。Unity内置的雾效可以产生基于距离的线性或指数雾效。想要在自己编写的顶点&#x2F;片元着色器中实现这些雾效，我们需要在Shader中添加#pragma multi_compile_fog指令，同时还需要使用相关内置宏，例如UNITY_FOG_COORDS、UNITY_TRANSFER_FOG 和 UNITY_APPLY_FOG等。</li>
+<li>这种方法的缺点在于，我们不仅需要为场景中的所有物体添加相关渲染代码，而且能够给实现的效果也非常有限。</li>
+<li>我们将学习一种基于屏幕后处理的全局雾效。这种方法可以方便地模拟各种雾效。</li>
+<li>基于屏幕后处理的全局雾效的关键是，根据深度纹理来重建每个像素在世界空间下的位置。</li>
+<li>重建方法：（比运动模糊中的更效率）对图像空间下的视锥体射线（从摄像机出发，指向图像上某点的射线）进行插值，这条射线存储了该像素在世界空间下到摄像机的方向信息。然后我们把该射线和线性化后的视角空间下的深度值相乘，再加上摄像机的世界位置，就可以得到该像素在世界空间下的位置。当我们得到世界坐标后，就可以使用各个公式来模拟全局雾效了。</li>
+</ul>
+<h2 id="再谈边缘检测"><a href="#再谈边缘检测" class="headerlink" title="再谈边缘检测"></a>再谈边缘检测</h2><ul>
+<li>之前我们使用的是Sobel算子，根据颜色来进行边缘检测实现描边效果。但是会得到许多我们不希望得到的边缘线。</li>
+<li>我们将要使用深度和法线纹理进行边缘检测。</li>
+<li>本节会使用Roberts算子进行边缘检测。</li>
+<li>通过纹理采样，获取比较当前片元的左上与右下、左下与右上的片元的法线与深度值的相差大小，如果高于某个阈值，则认为这是一条边。这样的方法相对基于颜色的边缘检测更加精确。</li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/blog/categories/%E3%80%8AUnityShader%E5%85%A5%E9%97%A8%E7%B2%BE%E8%A6%81%E3%80%8B/">《UnityShader入门精要》</a>
+                    
+                  </div>
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%8D%81%E5%9B%9B%E7%AB%A0-%E9%9D%9E%E7%9C%9F%E5%AE%9E%E6%84%9F%E6%B8%B2%E6%9F%93/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">第十四章-非真实感渲染</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E5%B1%8F%E5%B9%95%E5%90%8E%E5%A4%84%E7%90%86%E6%95%88%E6%9E%9C/">
+                        <span class="hidden-mobile">第十二章-屏幕后处理效果</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/blog/js/events.js" ></script>
+<script  src="/blog/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/blog/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/blog/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/blog/js/boot.js" ></script>
+
+
+</body>
+</html>

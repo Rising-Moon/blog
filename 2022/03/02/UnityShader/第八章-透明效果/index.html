@@ -1,0 +1,631 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/img/avatar.png">
+  <link rel="icon" href="/blog/img/avatar.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="RisingMoon">
+  <meta name="keywords" content="Unity 渲染">
+  
+    <meta name="description" content="实时渲染中要实现透明效果，通常在渲染模型时控制他的透明通道。 Unity中有两种方式实现透明效果：一种是透明度测试这种方法无法得到真正的半透明效果；另一种是透明度混合。 之前没有强调过渲染顺序的问题，因为深度缓冲的存在。在实时渲染中，深度缓冲是用于解决可见性的，他可以决定那些部分物体会被渲染在前面，而哪些部分会被其他物体遮挡。它的基本思想是：根据深度缓冲中的值来判断该片元距离摄像机的距离，当渲染">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第八章-透明效果">
+<meta property="og:url" content="https://rising-moon.github.io/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%85%AB%E7%AB%A0-%E9%80%8F%E6%98%8E%E6%95%88%E6%9E%9C/index.html">
+<meta property="og:site_name" content="RisingMoon的博客">
+<meta property="og:description" content="实时渲染中要实现透明效果，通常在渲染模型时控制他的透明通道。 Unity中有两种方式实现透明效果：一种是透明度测试这种方法无法得到真正的半透明效果；另一种是透明度混合。 之前没有强调过渲染顺序的问题，因为深度缓冲的存在。在实时渲染中，深度缓冲是用于解决可见性的，他可以决定那些部分物体会被渲染在前面，而哪些部分会被其他物体遮挡。它的基本思想是：根据深度缓冲中的值来判断该片元距离摄像机的距离，当渲染">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190417231355150.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNDg2NjM5,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190420232324240.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190421230847604.png">
+<meta property="article:published_time" content="2022-03-02T04:00:06.000Z">
+<meta property="article:modified_time" content="2022-03-02T11:01:14.604Z">
+<meta property="article:author" content="RisingMoon">
+<meta property="article:tag" content="Unity 渲染">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190417231355150.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNDg2NjM5,size_16,color_FFFFFF,t_70">
+  
+  
+  <title>第八章-透明效果 - RisingMoon的博客</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/blog/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"rising-moon.github.io","root":"/blog/","version":"1.8.14","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":5},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/blog/local-search.xml"};
+  </script>
+  <script  src="/blog/js/utils.js" ></script>
+  <script  src="/blog/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 40vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/blog/">
+      <strong>RisingMoon的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/blog/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="第八章-透明效果">
+              
+                第八章-透明效果
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      RisingMoon
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-03-02 12:00" pubdate>
+        2022年3月2日 中午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">第八章-透明效果</h1>
+            
+            <div class="markdown-body">
+              <ul>
+<li>实时渲染中要实现透明效果，通常在渲染模型时控制他的透明通道。</li>
+<li>Unity中有两种方式实现透明效果：一种是<strong>透明度测试</strong>这种方法无法得到真正的半透明效果；另一种是<strong>透明度混合</strong>。</li>
+<li>之前没有强调过渲染顺序的问题，因为深度缓冲的存在。在实时渲染中，深度缓冲是用于解决可见性的，他可以决定那些部分物体会被渲染在前面，而哪些部分会被其他物体遮挡。它的基本思想是：根据深度缓冲中的值来判断该片元距离摄像机的距离，当渲染一个片元时，需要把它的深度值和已经存在于深度缓冲中的值进行比较（如果开启了深度测试），如果它的值距离摄像机更远，那么说明这个物体不该被渲染到屏幕上（有物体遮挡了它）；否则这个片元应该覆盖此时颜色缓冲中的像素值，并且把它的深度值更新到深度缓存中（如果开启了深度写入）。<h3 id="透明度测试"><a href="#透明度测试" class="headerlink" title="透明度测试"></a>透明度测试</h3>只要一个片元的透明度不满足条件（通常是小于某个阈值）,那么它对应的片元就会被舍弃。被舍弃的片元就不会进行任何处理，也不会对颜色缓冲造成任何影响；否则，就会按照不透明物体来处理它，即进行深度测试、深度写入等。透明度测试是不用关闭深度写入的，它和其他不透明物体最大的不同就是它会根据透明度来舍弃一些片元。虽然简单，但是产生的效果也很极端，要么完全透明，要么完全不透明。<h3 id="透明度混合"><a href="#透明度混合" class="headerlink" title="透明度混合"></a>透明度混合</h3>使用当前片元的透明度作为混合因子，与已经储存在颜色缓冲区中的颜色值进行混合，得到新的颜色。但是透明度混合需要关闭深度写入，这使得我们需要非常小心物体的渲染顺序。需要注意的是，透明度混合只关闭了深度写入，并没有关闭深度测试。这意味着，当使用透明度混合渲染一个片元时，还是会和深度缓冲区的值进行比较，如果他的深度值距离相机更远，那么就不会进行混合操作。也就是对于透明度混合来说，深度缓冲是只读的。</li>
+</ul>
+<h2 id="为什么渲染顺序很重要"><a href="#为什么渲染顺序很重要" class="headerlink" title="为什么渲染顺序很重要"></a>为什么渲染顺序很重要</h2><p>渲染透明物体如果不关闭深度写入，那么在一个透明物体后面的物体便不会被渲染，即相当于被透明物体遮挡了，这并不符合逻辑。但是关闭了深度写入，这就破坏了深度缓冲的工作机制，即使这是必要的。</p>
+<ul>
+<li>我们先来看最简单的情况，假设场景中存在两个物体A和B，A是半透明物体，B是不透明物体，B处于A后方。</li>
+<li>第一种情况是先渲染B再渲染A。不透明物体开启了深度测试和写入，此时深度缓冲去没有数据，B写入深度和颜色缓冲区。随后我们渲染A，透明物体会进行深度测试，因此法线A距离摄像机更近，因此，我们会使用A的透明度与颜色缓冲区中的颜色进行混合，得到正确的半透明效果。</li>
+<li>第二种情况，我们先渲染A，再渲染B。渲染A时，深度缓冲区中没有任何数据，因此A直接写入颜色缓冲区。随后我们渲染B，渲染时B进行深度测试，深度缓冲区中依然没有数据，B直接写入并覆盖A在颜色缓冲区的数据，导致了实际效果仿佛是B遮挡了A，然而这时错误的。<br>基于这种情况，渲染引擎一般都会先对物体进行排序，再渲染。常用方法是：</li>
+<li>先渲染所有不透明物体，并且开启它们的深度测试和写入。</li>
+<li>把半透明物体按照它们距离摄像机的远近进行排序，然后按照从后往前的顺序渲染这些半透明物体，并开启它们的深度测试，但关闭深度写入。</li>
+<li>但这样仍然存在一些问题，我们的深度值记录的是一个像素的深度，并不是一个物体的深度，如果几个物体循环重叠，这样就会出现问题。<br><img src="https://img-blog.csdnimg.cn/20190417231355150.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNDg2NjM5,size_16,color_FFFFFF,t_70" srcset="/blog/img/loading.gif" lazyload alt="循环重叠"></li>
+</ul>
+<h2 id="Unity-Shader-的渲染顺序"><a href="#Unity-Shader-的渲染顺序" class="headerlink" title="Unity Shader 的渲染顺序"></a>Unity Shader 的渲染顺序</h2><ul>
+<li>Unity 为了解决渲染顺序的问题提供了<strong>渲染队列</strong>这一解决方案。我们可以使用SubShader的Queue标签来决定我们的模型将归于哪个渲染队列。Unity在内部 使用一系列整数索引来表示每个渲染队列，且索引号越小表示越早被渲染。</li>
+<li>Unity 中提前定义了5个渲染队列，且索引号越小表示越早被渲染。在Unity5中，Unity提前定义了5个渲染队列，在每个队列中间我们也可以使用其他队列。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>队列索引号</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Background</td>
+<td>1000</td>
+<td>这个渲染队列会在任何其他渲染队列之前被渲染，我们通常使用该队列来渲染那些需要绘制在背景上的物体。</td>
+</tr>
+<tr>
+<td>Geometry</td>
+<td>2000</td>
+<td>默认的渲染队列，大多数物体都使用这个队列。不透明物体使用这个队列</td>
+</tr>
+<tr>
+<td>AlphaTest</td>
+<td>2450</td>
+<td>需要透明度测试的物体使用这个队列。在Unity5中它从Geometry队列中被单独分出来，这是因为在所有不透明物体渲染之后再渲染它会更加高效。</td>
+</tr>
+<tr>
+<td>Transparent</td>
+<td>3000</td>
+<td>这个队列中的物体会在所有Geometry和AlphaTest物体渲染后，再<strong>从后往前</strong>的顺序进行渲染。任何使用了透明度混合（例如关闭了深度写入的Shader）的物体都应该使用该队列</td>
+</tr>
+<tr>
+<td>Overlay</td>
+<td>4000</td>
+<td>该队列用于实现一些叠加效果。任何需要在最后渲染的物体都应该使用该队列。</td>
+</tr>
+</tbody></table>
+<h2 id="透明度混合-1"><a href="#透明度混合-1" class="headerlink" title="透明度混合"></a>透明度混合</h2><ul>
+<li>它会使用当前片元的透明度作为混合因子，与已经储存在颜色缓冲区中的颜色值进行混合，得到新的颜色。透明度混合需要关闭深度写入，我们要非常小心物体的渲染顺序。</li>
+<li>为了进行混合，我们需要使用Unity提供的混合命令——Blend。要实现半透明效果，就需要把当前自身的颜色和已经存在于颜色缓冲中的颜色进行混合，混合时使用的函数就是由该指令决定的。</li>
+</ul>
+<h4 id="ShaderLab的Blend命令"><a href="#ShaderLab的Blend命令" class="headerlink" title="ShaderLab的Blend命令"></a>ShaderLab的Blend命令</h4><table>
+<thead>
+<tr>
+<th>语义</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Blend Off</td>
+<td>关闭混合</td>
+</tr>
+<tr>
+<td>Blend SrcFactor DstFactor</td>
+<td>开启混合，并设置混合因子。源颜色（该片元产生的颜色）会乘以SrcFactor，而目标颜色（已经存在于颜色缓存的颜色）会乘以DstFactor，然后把两者相加后再存入颜色缓冲中</td>
+</tr>
+<tr>
+<td>Blend SrcFactor DstFactor，SrcFactorA DstFactorA</td>
+<td>和上面几乎一样，只是使用不同的因子来混合透明通道</td>
+</tr>
+<tr>
+<td>BlendOp BlendOperation</td>
+<td>并非是把源颜色和目标颜色简单相加后混合，而是使用BlendOperation对它们进行其他操作</td>
+</tr>
+</tbody></table>
+<p>只有打开混合模式以后，设置片元的透明通道才有意义，Unity在我们使用Blend命令的时候就自动帮我们打开了。我们通常会把源颜色的混合因子SrcFactor设为SrcAlpha，而目标颜色的混合因子DstFactor设为OneMinusSrcAlpha。这意味着，经过混合后的新颜色是：<br><img src="https://img-blog.csdnimg.cn/20190420232324240.png" srcset="/blog/img/loading.gif" lazyload alt="透明度混合公式">  </p>
+<h2 id="开启深度写入的半透明效果"><a href="#开启深度写入的半透明效果" class="headerlink" title="开启深度写入的半透明效果"></a>开启深度写入的半透明效果</h2><ul>
+<li>之前我们解释了由于关闭深度写入带来的各种问题。当模型本身有复杂的遮挡关系或是包含了复杂的非凸网格的时候，就会有各种各样因为排序错误产生的错误的透明效果。由于关闭了深度写入我们无法对模型进行像素级别的深度排序。这时我们可以想办法重新利用深度写入，让模型可以像半透明物体一样进行淡入淡出。  </li>
+<li>一种解决方法是<strong>使用两个Pass</strong>来渲染模型：第一个Pass开启深度写入，但不输出颜色，它的目的仅仅是为了把该模型的深度值写入深度缓冲中；第二个Pass进行正常的透明度混合，由于上一个Pass已经得到了逐像素的正确的深度信息，该Pass就可以按照像素级别的正确深度信息，但这种方法的缺点在于多使用一个Pass造成的性能影响。</li>
+</ul>
+<h2 id="ShaderLab-的混合命令"><a href="#ShaderLab-的混合命令" class="headerlink" title="ShaderLab 的混合命令"></a>ShaderLab 的混合命令</h2><ul>
+<li>首先我们看一下混合是怎样实现的。当片元着色器产生一个颜色时，可以选择与颜色缓存中的颜色进行混合。这样混合就和两个操作数有关：<strong>源颜色</strong>和<strong>目标颜色</strong>有关。源颜色我们使用S表示，指的是片元着色器产生的颜色；目标颜色我们使用D表示，指的是从颜色缓冲中读取到的颜色值。对它们混合后得到的颜色值，我们用O表示它会重新写入到颜色缓冲中。需要注意的是，当我们谈及混合中的源颜色、目标颜色和输出颜色时，它们都包含了RGBA四个通道的颜色值，而并非仅仅是RGB通道。</li>
+<li>想要使用混合，我们必须开启它。在Unity中，当我们使用Blend（Blend Off命令除外），除了设置混合状态也会自动开启混合。在其他图形API中我们是需要手动开启的。例如在OpenGL中，我们需要使用glEnable(GL_BLEND)来开启混合。但在Unity中吗，它已经在背后为我们做了这些工作。</li>
+</ul>
+<h3 id="混合等式和参数"><a href="#混合等式和参数" class="headerlink" title="混合等式和参数"></a>混合等式和参数</h3><ul>
+<li>混合是一个逐片元级的操作，而且它是不可编程的，但是确实高度可配置的。我们可以控制混合时使用的运算操作、混合因子等来影响混合。</li>
+<li>现在我们知道两个操作数：源颜色S和目标颜色D，想要得到输出颜色O就必须使用一个等式来计算。我们把这个等式称作<strong>混合等式</strong>。当进行混合时，我们需要使用两个混合等式:一个用于混合RGB通道，一个用于混合A通道。设置混合状态时，我们就相当于设置了混合等式中的<strong>操作</strong>和<strong>因子</strong>。默认情况下，混合等式使用的操作符是加操作（也可以设置其他操作），我们只需要设置一下混合因子就可以了。由于需要两个等式，每个等式需要两个因子，所以我们总共需要4个因子。<h4 id="ShaderLab中设置混合因子的命令"><a href="#ShaderLab中设置混合因子的命令" class="headerlink" title="ShaderLab中设置混合因子的命令"></a>ShaderLab中设置混合因子的命令</h4>命令 | 描述</li>
+</ul>
+<p>—|—<br>Blend SrcFactor DstFactor| 开启混合，并设置混合因子。源颜色（该片元产生的颜色）会乘以SrcFactor，而目标颜色（已经存在于颜色缓存的颜色）会乘以DstFactor，然后把两者相加后再存入颜色缓冲中<br>Blend SrcFactor DstFactor,SrcFactorA DstFactorA | 和上面一样，只是使用不同的因子来混合透明通道</p>
+<ul>
+<li>第一个命令只提供两个因子，这意味着将使用同样的混合因子来混合RGB通道和A通道。</li>
+<li>混合公式<br><img src="https://img-blog.csdnimg.cn/20190421230847604.png" srcset="/blog/img/loading.gif" lazyload alt="透明度加法混合公式"></li>
+</ul>
+<h4 id="ShaderLab中的混合因子"><a href="#ShaderLab中的混合因子" class="headerlink" title="ShaderLab中的混合因子"></a>ShaderLab中的混合因子</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>One</td>
+<td>因子为1</td>
+</tr>
+<tr>
+<td>Zero</td>
+<td>因子为0</td>
+</tr>
+<tr>
+<td>SrcColor</td>
+<td>因子为源颜色值。当用于RGB的混合等式时，使用SrcColor中的RGB分量作为混合因子；当用于混合A的混合公式时，使用SrcColor的A分量作为混合因子</td>
+</tr>
+<tr>
+<td>SrcAlpha</td>
+<td>因子为源颜色的透明度值（A通道）</td>
+</tr>
+<tr>
+<td>DstColor</td>
+<td>因子为目标颜色值。当用于RGB的混合等式时，使用DstColor中的RGB分量作为混合因子；当用于混合A的混合公式时，使用DstColor的A分量作为混合因子</td>
+</tr>
+<tr>
+<td>DstAlpha</td>
+<td>因子为目标颜色的透明度值（A通道）</td>
+</tr>
+<tr>
+<td>OneMinusSrcColor</td>
+<td>因子为(1-源颜色值)。当用于混合RGB的混合等式时，使用结果的RGB分量作为混合因子；当用于混合A的混合等式时，使用结果的A分量作为混合因子。</td>
+</tr>
+<tr>
+<td>OneMinusSrcAlpha</td>
+<td>因子为(1-源颜色透明度)</td>
+</tr>
+<tr>
+<td>OneMinusDstColor</td>
+<td>因子为(1-目标颜色)。当用于混合RGB的混合等式时，使用结果的RGB分量作为混合因子；当用于混合A的混合等式时，使用结果的A分量作为混合因子。</td>
+</tr>
+<tr>
+<td>OneMinusDstAlpha</td>
+<td>因子为(1-目标颜色透明度)</td>
+</tr>
+</tbody></table>
+<h4 id="混合操作"><a href="#混合操作" class="headerlink" title="混合操作"></a>混合操作</h4><ul>
+<li>我们可以使用ShaderLab的BlendOp BlendOperation 命令，即混合操作命令来设置混合操作的操作符。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Add</td>
+<td>将混合后的源颜色和目的颜色相加。默认的混合操作。</td>
+</tr>
+<tr>
+<td>Sub</td>
+<td>用混合后的源颜色减去混合后目的颜色。</td>
+</tr>
+<tr>
+<td>RevSub</td>
+<td>用混合后的目的颜色减去混合后的源颜色。</td>
+</tr>
+<tr>
+<td>Min</td>
+<td>使用源颜色和目的颜色中较小的值，是逐分量比较的。</td>
+</tr>
+<tr>
+<td>Max</td>
+<td>使用源颜色和目的颜色中较大的值，是逐分量比较的。</td>
+</tr>
+</tbody></table>
+<ul>
+<li>混合操作命令通常是与混合因子命令一起工作的。但需要注意的是，当使用Min或Max混合操作时，混合因子是不起任何作用的。</li>
+</ul>
+<h3 id="常见的混合类型"><a href="#常见的混合类型" class="headerlink" title="常见的混合类型"></a>常见的混合类型</h3><ul>
+<li>通过混合操作和混合因子命令的组合，我们可以得到一些类似Photoshop混合模式中的混合效果：<figure class="highlight awk"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></div></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">//</span>正常（Normal），即透明度混合<br>Blend SrcAlpha OneMinusSrcAlpha<br><br><span class="hljs-regexp">//</span>柔和相加（Soft Additive）<br>Blend OneMinusDstColor One<br><br><span class="hljs-regexp">//</span>正片叠底（Multiply），即相乘<br>Blend DstColor Zero<br><br><span class="hljs-regexp">//</span>两倍相乘（<span class="hljs-number">2</span>x Multiply）<br>Blend DstColor SrcColor<br><br><span class="hljs-regexp">//</span>变暗（Darken）<br>BlendOp Min<br>Blend One One<br><br><span class="hljs-regexp">//</span>变亮（Lighten）<br>BlendOp Max<br>Blend One One<br><br><span class="hljs-regexp">//</span>滤色（Screen）<br>Blend OneMinusDstColor One<br><span class="hljs-regexp">//</span>等同于<br>Blend One OneMinusSrcColor<br><br><span class="hljs-regexp">//</span>线性减淡<br>Blend One One<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="双面渲染的透明效果"><a href="#双面渲染的透明效果" class="headerlink" title="双面渲染的透明效果"></a>双面渲染的透明效果</h2><ul>
+<li>在现实生活中，如果一个物体是透明的，意味着我们不仅可以透过它看到其他物体的样子，也可以看到它内部的结构。之前的透明度混合或者是透明度测试中，我们都无法观察到正方体内部及其背面的形状，导致物体看起来就好像只有半个。这是因为默认情况下渲染引擎剔除了物体背面（相对于摄像机方向）的渲染图元。<h3 id="透明度测试的双面渲染"><a href="#透明度测试的双面渲染" class="headerlink" title="透明度测试的双面渲染"></a>透明度测试的双面渲染</h3></li>
+<li>在Pass的渲染设置中添加Cull指令来关闭剔除即可（Cull Off）<h3 id="透明度混合的双面渲染"><a href="#透明度混合的双面渲染" class="headerlink" title="透明度混合的双面渲染"></a>透明度混合的双面渲染</h3></li>
+<li>透明度混合的双面渲染要更复杂一些这是因为透明度混合需要关闭深度写入。对于透明度测试来说，由于我们没有关闭深度写入，因此可以利用深度缓冲逐像素的粒度进行深度排序，从而保证渲染的正确性。我们如果直接关闭剔除功能，我们无法保证同一个物体的正面和背面图元的渲染顺序，就可能的到错误的半透明效果。</li>
+<li>为此，我们把双面渲染的工作分成两个Pass——第一个Pass只渲染背面，第二个Pass只渲染正面，由于Unity会顺序执行各个Pass，因此我们可以保证背面总是在正面之前被渲染，从而可以保证正确的渲染关系。</li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/blog/categories/%E3%80%8AUnityShader%E5%85%A5%E9%97%A8%E7%B2%BE%E8%A6%81%E3%80%8B/">《UnityShader入门精要》</a>
+                    
+                  </div>
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%9B%B4%E5%A4%8D%E6%9D%82%E7%9A%84%E5%85%89%E7%85%A7/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">第九章-更复杂的光照</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E4%B8%83%E7%AB%A0-%E5%9F%BA%E7%A1%80%E7%BA%B9%E7%90%86/">
+                        <span class="hidden-mobile">第七章-基础纹理</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/blog/js/events.js" ></script>
+<script  src="/blog/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/blog/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/blog/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/blog/js/boot.js" ></script>
+
+
+</body>
+</html>

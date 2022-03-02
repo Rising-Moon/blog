@@ -16,22 +16,39 @@
   <meta name="author" content="RisingMoon">
   <meta name="keywords" content="Unity 渲染">
   
-    <meta name="description" content="记录游戏开发点滴">
-<meta property="og:type" content="website">
-<meta property="og:title" content="分类 - 《UnityShader入门精要》">
-<meta property="og:url" content="https://rising-moon.github.io/blog/categories/%E3%80%8AUnityShader%E5%85%A5%E9%97%A8%E7%B2%BE%E8%A6%81%E3%80%8B/page/2/index.html">
+    <meta name="description" content="消融效果 消融效果常见于游戏中的角色死亡、地图烧毁等效果。 原理十分简单，概括来说就是使用噪声纹理+透明度测试。我们使用噪声纹理采样的结果与某个阈值比较，如果小于阈值，就是用clip函数把对应的像素减掉，这些部分就对应了被“烧毁”的区域。镂空区域边缘的烧焦效果是将两种颜色混合，再用pow函数处理后，与原纹理颜色混合后的结果。 使用不同的噪声和纹理属性（材质面板上的Tiling和Offset值）都会">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第十五章-使用噪声">
+<meta property="og:url" content="https://rising-moon.github.io/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%8D%81%E4%BA%94%E7%AB%A0-%E4%BD%BF%E7%94%A8%E5%99%AA%E5%A3%B0/index.html">
 <meta property="og:site_name" content="RisingMoon的博客">
-<meta property="og:description" content="记录游戏开发点滴">
+<meta property="og:description" content="消融效果 消融效果常见于游戏中的角色死亡、地图烧毁等效果。 原理十分简单，概括来说就是使用噪声纹理+透明度测试。我们使用噪声纹理采样的结果与某个阈值比较，如果小于阈值，就是用clip函数把对应的像素减掉，这些部分就对应了被“烧毁”的区域。镂空区域边缘的烧焦效果是将两种颜色混合，再用pow函数处理后，与原纹理颜色混合后的结果。 使用不同的噪声和纹理属性（材质面板上的Tiling和Offset值）都会">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-03-02T04:00:13.000Z">
+<meta property="article:modified_time" content="2022-03-02T11:02:00.107Z">
 <meta property="article:author" content="RisingMoon">
 <meta property="article:tag" content="Unity 渲染">
 <meta name="twitter:card" content="summary_large_image">
   
   
-  <title>分类 - 《UnityShader入门精要》 - RisingMoon的博客</title>
+  <title>第十五章-使用噪声 - RisingMoon的博客</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
@@ -58,7 +75,7 @@
 
 
 <body>
-  <header style="height: 60vh;">
+  <header style="height: 40vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/blog/">
@@ -147,11 +164,38 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="分类 - 《UnityShader入门精要》">
+            <span class="h2" id="subtitle" title="第十五章-使用噪声">
               
-                分类 - 《UnityShader入门精要》
+                第十五章-使用噪声
               
             </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      RisingMoon
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-03-02 12:00" pubdate>
+        2022年3月2日 中午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+
+  
+
+  
+  
+</div>
 
             
           </div>
@@ -164,70 +208,96 @@
 
   <main>
     
-      <div class="container nopadding-x-md">
-        <div class="py-5" id="board"
-          >
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
-                
-
-<div class="list-group">
-  <p class="h4">共计 15 篇文章</p>
-  <hr>
-  
-  
-    
       
-      <p class="h5">2022</p>
-    
-    <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%85%AD%E7%AB%A0-Unity%E4%B8%AD%E7%9A%84%E5%9F%BA%E7%A1%80%E5%85%89%E7%85%A7/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">第六章-Unity中的基础光照</span>
-      <time style="float: right;">03-02</time>
-    </a>
-  
-    
-    <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0UnityShader%E4%B9%8B%E6%97%85/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">第五章-开始学习UnityShader之旅</span>
-      <time style="float: right;">03-02</time>
-    </a>
-  
-    
-    <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%AD%A6%E4%B9%A0Shader%E6%89%80%E9%9C%80%E7%9A%84%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">第四章-学习Shader所需的数学基础</span>
-      <time style="float: right;">03-02</time>
-    </a>
-  
-    
-    <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E4%B8%89%E7%AB%A0-UnityShader%E5%9F%BA%E7%A1%80/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">第三章-UnityShader基础</span>
-      <time style="float: right;">03-02</time>
-    </a>
-  
-    
-    <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%B8%B2%E6%9F%93%E6%B5%81%E6%B0%B4%E7%BA%BF/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">第二章-渲染流水线</span>
-      <time style="float: right;">03-02</time>
-    </a>
-  
-</div>
 
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">第十五章-使用噪声</h1>
+            
+            <div class="markdown-body">
+              <h2 id="消融效果"><a href="#消融效果" class="headerlink" title="消融效果"></a>消融效果</h2><ul>
+<li><strong>消融</strong>效果常见于游戏中的角色死亡、地图烧毁等效果。</li>
+<li>原理十分简单，概括来说就是使用噪声纹理+透明度测试。我们使用噪声纹理采样的结果与某个阈值比较，如果小于阈值，就是用clip函数把对应的像素减掉，这些部分就对应了被“烧毁”的区域。镂空区域边缘的烧焦效果是将两种颜色混合，再用pow函数处理后，与原纹理颜色混合后的结果。</li>
+<li>使用不同的噪声和纹理属性（材质面板上的Tiling和Offset值）都会得到不同的消融效果。想要得到好的消融效果，也需要美术人员提供合适的噪声纹理来配合。</li>
+</ul>
+<h2 id="水波效果"><a href="#水波效果" class="headerlink" title="水波效果"></a>水波效果</h2><ul>
+<li>模拟实时水面时，我们也会使用噪声纹理。此时噪声通常会作为一个高度图，不断修改水面的法线方向。为了模拟水不断流动的效果，还会使用和时间相关的变量对噪声纹理进行采样，得到法线信息后，再进行正常的反射+折射计算，得到最后的水面波动效果。</li>
+<li></li>
+</ul>
 
-  <nav aria-label="navigation">
-    <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/blog/categories/%E3%80%8AUnityShader%E5%85%A5%E9%97%A8%E7%B2%BE%E8%A6%81%E3%80%8B/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/blog/categories/%E3%80%8AUnityShader%E5%85%A5%E9%97%A8%E7%B2%BE%E8%A6%81%E3%80%8B/">1</a><span class="page-number current">2</span>
-    </span>
-  </nav>
-
-
-
-
-              </div>
             </div>
-          </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/blog/categories/%E3%80%8AUnityShader%E5%85%A5%E9%97%A8%E7%B2%BE%E8%A6%81%E3%80%8B/">《UnityShader入门精要》</a>
+                    
+                  </div>
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%8D%81%E5%85%AD%E7%AB%A0-Unity%E4%B8%AD%E7%9A%84%E6%B8%B2%E6%9F%93%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">第十六章-Unity中的渲染优化技术</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%8D%81%E5%9B%9B%E7%AB%A0-%E9%9D%9E%E7%9C%9F%E5%AE%9E%E6%84%9F%E6%B8%B2%E6%9F%93/">
+                        <span class="hidden-mobile">第十四章-非真实感渲染</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
         </div>
       </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
     
 
     
@@ -334,6 +404,19 @@
   
 
 
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
 
 
 

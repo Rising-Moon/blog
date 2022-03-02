@@ -1,0 +1,503 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/img/avatar.png">
+  <link rel="icon" href="/blog/img/avatar.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="RisingMoon">
+  <meta name="keywords" content="Unity 渲染">
+  
+    <meta name="description" content="纹理最初的目的就是使用一张图片来控制模型的外观。使用纹理映射技术，我们可以把一张图“黏”在模型表面，逐纹素（纹素的名字是为了与像素作区分）地控制模型的颜色。   在美术人员建模时，通常会在建模软件中利用纹理展开技术把纹理映射坐标存储到每个顶点上。纹理映射坐标定义了该顶点在纹理中对应的2D坐标。通常，这些坐标使用一个二维变量(u,v)来表示，其中u是横向坐标，而v是纵向坐标。因此，纹理坐标也被称为">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第七章-基础纹理">
+<meta property="og:url" content="https://rising-moon.github.io/blog/2022/03/02/UnityShader/%E7%AC%AC%E4%B8%83%E7%AB%A0-%E5%9F%BA%E7%A1%80%E7%BA%B9%E7%90%86/index.html">
+<meta property="og:site_name" content="RisingMoon的博客">
+<meta property="og:description" content="纹理最初的目的就是使用一张图片来控制模型的外观。使用纹理映射技术，我们可以把一张图“黏”在模型表面，逐纹素（纹素的名字是为了与像素作区分）地控制模型的颜色。   在美术人员建模时，通常会在建模软件中利用纹理展开技术把纹理映射坐标存储到每个顶点上。纹理映射坐标定义了该顶点在纹理中对应的2D坐标。通常，这些坐标使用一个二维变量(u,v)来表示，其中u是横向坐标，而v是纵向坐标。因此，纹理坐标也被称为">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2019041623265237.png">
+<meta property="article:published_time" content="2022-03-02T04:00:05.000Z">
+<meta property="article:modified_time" content="2022-03-02T11:01:05.529Z">
+<meta property="article:author" content="RisingMoon">
+<meta property="article:tag" content="Unity 渲染">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/2019041623265237.png">
+  
+  
+  <title>第七章-基础纹理 - RisingMoon的博客</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/blog/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"rising-moon.github.io","root":"/blog/","version":"1.8.14","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":5},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/blog/local-search.xml"};
+  </script>
+  <script  src="/blog/js/utils.js" ></script>
+  <script  src="/blog/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 40vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/blog/">
+      <strong>RisingMoon的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/blog/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="第七章-基础纹理">
+              
+                第七章-基础纹理
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      RisingMoon
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-03-02 12:00" pubdate>
+        2022年3月2日 中午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">第七章-基础纹理</h1>
+            
+            <div class="markdown-body">
+              <ul>
+<li>纹理最初的目的就是使用一张图片来控制模型的外观。使用<strong>纹理映射</strong>技术，我们可以把一张图“黏”在模型表面，逐<strong>纹素</strong>（纹素的名字是为了与像素作区分）地控制模型的颜色。  </li>
+<li>在美术人员建模时，通常会在建模软件中利用纹理展开技术把<strong>纹理映射坐标</strong>存储到每个顶点上。纹理映射坐标定义了该顶点在纹理中对应的2D坐标。通常，这些坐标使用一个二维变量(u,v)来表示，其中u是横向坐标，而v是纵向坐标。因此，纹理坐标也被称为UV坐标。（原来展UV是这个意思）  </li>
+<li>尽管纹理的大小可以是多种多样的，例如可以是256x256或者1028x1028的，但顶点的UV坐标通常都被归一化到[0,1]范围内。</li>
+<li>注意OpenGL（原点位于左下）和DirectX（原点位于左上）中纹理坐标的不同。</li>
+</ul>
+<h2 id="纹理资源属性"><a href="#纹理资源属性" class="headerlink" title="纹理资源属性"></a>纹理资源属性</h2><h3 id="纹理类型。"><a href="#纹理类型。" class="headerlink" title="纹理类型。"></a>纹理类型。</h3><p>选择合适的类型是为了让unity知道我们的意图，为Unity Shader传递正确的纹理，并在一些情况下可以让Unity对该纹理进行优化。</p>
+<h3 id="Wrap-Mode"><a href="#Wrap-Mode" class="headerlink" title="Wrap Mode"></a>Wrap Mode</h3><p>决定了当纹理坐标超过[0,1]范围后将会如何被平铺。Wrap Mode有两种模式：</p>
+<ul>
+<li>Repeat模式下，纹理坐标超过1，那它的整数部分就会被舍弃，而使用小数部分进行采样，这样的结果是纹理将会不断重复；</li>
+<li>Clamp模式下，如果纹理坐标大于1，那么将会截取到1，如果小于0，那么将会截取到0。<h3 id="Filter-Mode"><a href="#Filter-Mode" class="headerlink" title="Filter Mode"></a>Filter Mode</h3></li>
+<li>它决定了当纹理由于变换而产生拉伸时将会采用哪种滤波模式。Filter Mode支持3种模式：Point、Bilinear、Trilinear。它们得到的图片滤波效果依次上升，但需要耗费的性能也依次增大。纹理滤波会影响放大或缩小纹理得到的图片质量。例如把64X64大小的纹理贴在一个512X512大小的平面上时，就需要放大纹理。纹理缩小的过程比放大更加复杂，此时原纹理多个像素将会对应一个目标像素。纹理缩放更加复杂的原因在于我们往往需要处理锯齿问题，最常用的方法就是多级渐远纹理技术。多级渐远纹理技术是将原纹理提前使用滤波处理来得到很多更小的图像，形成一个图像金字塔，每一层都是对上一层图像降采样的结果。当物体原理摄像机时就可以直接使用较小的纹理。缺点是通常会多占用33%的内存空间。  </li>
+<li>在Unity中，我们将纹理类型选择为Advanced，再勾选Generate Mip Maps即可开启多级渐远纹理技术。</li>
+</ul>
+<p>在内部实现上：</p>
+<ul>
+<li>Point模式使用<strong>最近邻</strong>滤波，在放大缩小时，它的采样像素数目通常只有一个，因此图像会看起来有种像素风格的效果。</li>
+<li>Bilinear滤波则使用了线性滤波，对于每个目标像素，它会找到4个相邻像素，然后对它们进行线性插值混合后得到最终像素，因此图像看起来像被模糊了。</li>
+<li>Trilinear滤波几乎和Bilinear一样，只是Trilinear还会在多级渐远纹理之间进行混合。</li>
+</ul>
+<h2 id="纹理最大尺寸和纹理模式"><a href="#纹理最大尺寸和纹理模式" class="headerlink" title="纹理最大尺寸和纹理模式"></a>纹理最大尺寸和纹理模式</h2><ul>
+<li>Unity允许我们为不同目标平台选择不同的分辨率。<br>如果导入的纹理大小超过了Max Texture Size中设置的值，那么就会被缩放到这个值。导入的纹理可以是非正方形的，但长宽的大小应该是2的幂，如2,4,8,16,32,64,128,512,1024等，如果使用了非2的幂（NPOT）大小的纹理，那么这些纹理往往会占用更多的内存空间，而且GPU读取该纹理的速度也会下降，有些平台甚至不支持NPOT纹理。</li>
+<li>Format决定了Unity内部使用哪种格式来存储该纹理。如果我们将Texture Type设置为Advanced，那么会有更多的Format供我们选择。这里不介绍每种纹理格式，但要知道纹理格式精度越高，越消耗性能，但是得到的效果也越好。</li>
+</ul>
+<h2 id="凹凸映射"><a href="#凹凸映射" class="headerlink" title="凹凸映射"></a>凹凸映射</h2><p>凹凸映射目的是使用一张纹理来修改模型表面的法线，一遍提供更多的细节。这只是让模型看起来好像是凹凸不平的，但可以从模型轮廓看出破绽。<br>目前有两种方法可以用来凹凸映射：</p>
+<ul>
+<li><p>使用<strong>高度纹理</strong>来模拟<strong>表面位移</strong>，然后得到一个修改后的法线值，这种方法被称作<strong>高度映射</strong></p>
+</li>
+<li><p>使用<strong>法线纹理</strong>来直接存储表面法线，这种方法被称作<strong>法线映射</strong></p>
+<h3 id="高度纹理"><a href="#高度纹理" class="headerlink" title="高度纹理"></a>高度纹理</h3><p>使用一张高度图来实现凹凸映射。高度图中存储的是强度值，用于表示表面局部区域的海拔高度。因此颜色越前表示该位置的表面越向外凸起，而颜色越深越向里凹。这种方法好处是直观，可以明确知道一个模型表面的凹凸情况，但缺点是计算更加复杂，实时计算时不能直接得到表面法线，而是需要像素的灰度值计算而得，因此需要消耗更多的性能。<br>高度图通常会和法线映射一起使用，用于给出表面凹凸的额外信息。但通常会使用法线映射来修改光照。</p>
+<h3 id="法线纹理"><a href="#法线纹理" class="headerlink" title="法线纹理"></a>法线纹理</h3><p>由于法线分量范围在[-1,1]，而像素的分量范围为[0,1]，因此我们需要做一个映射，通常使用的映射就是：<br><img src="https://img-blog.csdnimg.cn/2019041623265237.png" srcset="/blog/img/loading.gif" lazyload alt="向量映射法线公式"><br>反映射就是个逆函数</p>
+</li>
+<li><p>将修改后的模型空间中的表面法线存储在一张纹理中的，这种纹理被称为是<strong>模型空间的法线纹理</strong>。</p>
+</li>
+<li><p>然而通常我们会采用另一种纹理坐标，即模型顶点的切线空间来储存法线。对于模型的每个顶点，它都有一个属于自己的切线空间，原点为该顶点本身，z轴为顶点的法线方向，x轴是顶点的切线方向，y轴可以由法线和切线方向差积得到，被称为副法线或者副切线。这种纹理被称为是<strong>切线空间的法线纹理</strong>。</p>
+</li>
+<li><p>模型空间的法线纹理通常看起来是五颜六色的，而切线空间的法线纹理通常看起来是浅蓝色的</p>
+<h4 id="模型空间储存法线的优点"><a href="#模型空间储存法线的优点" class="headerlink" title="模型空间储存法线的优点"></a>模型空间储存法线的优点</h4></li>
+<li><p>实现简单，更加直观。甚至不需要模型原始的法线和切线等信息，也就是计算更少。生成也非常简单。</p>
+</li>
+<li><p>纹理坐标的缝合处和尖锐的边角部分，可见的突变（缝隙）较少，即可提供平滑边界。因为法线方向存储在同一坐标空间中，所以可以通过插值来平滑变换。</p>
+<h4 id="切线空间储存法线的优点"><a href="#切线空间储存法线的优点" class="headerlink" title="切线空间储存法线的优点"></a>切线空间储存法线的优点</h4></li>
+<li><p>自由度高。模型空间下的法线纹理是<strong>绝对法线信息</strong>，仅可用于创建它的那个模型，应用到其他模型上效果就完全错误了。而切线空间记录的是相对法线信息，这意味着可以把它应用到完全不同的网格上，也可以得到一个合理的结果。</p>
+</li>
+<li><p>可进行UV动画。比如，我们可以移动一个纹理的UV坐标来实现一个凹凸移动的效果，但是使用模型空间的法线纹理就会得到完全错误的结果。这种动画通常会使用在水或火山熔岩这类型的物体上。</p>
+</li>
+<li><p>可以重用法线纹理。比如一个砖块，用一张法线贴图就可以用到所有6个面上。</p>
+</li>
+<li><p>可压缩。由于切线空间下法线的Z方向总是正向，因此可以仅储存XY方向，而推导出Z方向。</p>
+</li>
+</ul>
+<p>(顺手记录一个会用到的第四章的知识点，A坐标空间下，B坐标空间三条坐标轴的单位向量横向排列组成的矩阵就是A坐标空间到B坐标空间的变换矩阵，好像限制条件是没有缩放的情况下)</p>
+<h2 id="Unity中的法线纹理类型"><a href="#Unity中的法线纹理类型" class="headerlink" title="Unity中的法线纹理类型"></a>Unity中的法线纹理类型</h2><p>当我们把法线纹理的纹理类型设置为Normal map时，可以使用Unity的内置函数UnpackNormal来得到正确的法线方向。<br>UnpackNormal的源码为：  </p>
+<figure class="highlight nsis"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></div></td><td class="code"><pre><code class="hljs nsis">inline fixed3 Unpack<span class="hljs-params">Normal</span>DXT5nm(fixed4 packed<span class="hljs-params">normal</span>)&#123;<br>    fixed3 <span class="hljs-params">normal</span><span class="hljs-comment">;</span><br>    <span class="hljs-params">normal</span>.xy = packed<span class="hljs-params">normal</span>.wy * <span class="hljs-number">2</span> - <span class="hljs-number">1</span><span class="hljs-comment">;</span><br>    <span class="hljs-params">normal</span>.z = sqrt(<span class="hljs-number">1</span> - saturate(dot(<span class="hljs-params">normal</span>.xy,<span class="hljs-params">normal</span>.xy)))<span class="hljs-comment">;</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-params">normal</span><span class="hljs-comment">;</span><br>&#125;<br><br>inline fixed3 Unpack<span class="hljs-params">Normal</span>(fixed4 packed<span class="hljs-params">normal</span>)&#123;<br>    <span class="hljs-comment">#if define(UNITY_NO_DXT5nm)</span><br>        <span class="hljs-keyword">return</span> packed<span class="hljs-params">normal</span>.xyz * <span class="hljs-number">2</span> - <span class="hljs-number">1</span><span class="hljs-comment">;</span><br>    <span class="hljs-comment">#else</span><br>        <span class="hljs-keyword">return</span> Unpack<span class="hljs-params">Normal</span>DXT5nm(packed<span class="hljs-params">normal</span>)<span class="hljs-comment">;</span><br>    <span class="hljs-comment">#endif</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>从代码可以看出，UnpackedNomal函数对使用DXT5nm压缩格式的法线纹理进行的相应解码方式。<br>DXT5nm压缩格式中，纹素的a通道（即w分量）对用了法线的x分量，g通道对应了法线的y分量，而纹理的r和b通道则会被舍弃，法线的z分量可以由xy分量推导得出。使用这种压缩可以减少法线纹理占用的空间。  </li>
+<li>纹理设置中还有一个Create from Grayscale复选框，勾选这个复选框后，这张纹理贴图就被当做高度图来处理。勾选后会增加两个选项——Bumpiness和Filtering。其中Bumpiness用于控制凹凸程度，而Filtering用于控制我们使用哪种方式来计算凹凸程度。<br>一种是Smooth，这使得生成的法线纹理会比较平滑<br>另一种是sharp，它会使用Sobel滤波，来生成法线。Sobel滤波的实现非常简单，我们只需要在一个3x3的滤波器中计算x和y方向上的导数，然后从中得到法线即可。<h2 id="渐变纹理"><a href="#渐变纹理" class="headerlink" title="渐变纹理"></a>渐变纹理</h2>一开始时，人们使用纹理来定义一个物体的颜色，后来人们发现纹理其实可以用来储存任何表面属性。一种常见的用法就是使用渐变纹理来控制漫反射光照的结果。之前的满反射计算时，我们使用表面法线和光照方向的点积乘上物体的反照率来得到的。有时我们需要更灵活地控制光照结果。这种技术在《军团要塞2》中流行起来，也是由Valve公司提出来的。最初由Gooch等人在《A Non-Photorealistic Lighting Model For Automatic Technical Illustration》中被提出。这种技术可以使物体轮廓线更加明显，很多卡通风格的渲染中都使用了这种技术。</li>
+</ul>
+<h2 id="遮罩纹理"><a href="#遮罩纹理" class="headerlink" title="遮罩纹理"></a>遮罩纹理</h2><ul>
+<li>遮罩允许我们保护某些区域，使它们免于某些修改。有时我们希望模型表面某些区域的反光强一些，某些区域弱一些，就可以使用遮罩纹理实现。</li>
+<li>使用遮罩纹理的一般流程：通过采样得到遮罩纹理的纹素值，然后使用其中某个（或某几个）通道的值来与某种表面属性进行相乘，这样，当该通道的值为0时，可以保护表面不受该属性的影响。</li>
+<li>在真实的游戏制作中，遮罩纹理已经不仅局限于保护某些区域使它们免于某些修改，而是可以存储任何我们希望逐像素控制的表面属性。通常一张纹理拥有RGBA四个通道，这意味这我们可以存储4个表面属性到一张纹理中。dota2中模型就有额外的两张纹理用来提供额外的8个表面属性。</li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/blog/categories/%E3%80%8AUnityShader%E5%85%A5%E9%97%A8%E7%B2%BE%E8%A6%81%E3%80%8B/">《UnityShader入门精要》</a>
+                    
+                  </div>
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%85%AB%E7%AB%A0-%E9%80%8F%E6%98%8E%E6%95%88%E6%9E%9C/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">第八章-透明效果</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%85%AD%E7%AB%A0-Unity%E4%B8%AD%E7%9A%84%E5%9F%BA%E7%A1%80%E5%85%89%E7%85%A7/">
+                        <span class="hidden-mobile">第六章-Unity中的基础光照</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/blog/js/events.js" ></script>
+<script  src="/blog/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/blog/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/blog/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/blog/js/boot.js" ></script>
+
+
+</body>
+</html>

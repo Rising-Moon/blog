@@ -16,22 +16,39 @@
   <meta name="author" content="RisingMoon">
   <meta name="keywords" content="Unity 渲染">
   
-    <meta name="description" content="记录游戏开发点滴">
-<meta property="og:type" content="website">
-<meta property="og:title" content="分类 - 《UnityShader入门精要》">
-<meta property="og:url" content="https://rising-moon.github.io/blog/categories/%E3%80%8AUnityShader%E5%85%A5%E9%97%A8%E7%B2%BE%E8%A6%81%E3%80%8B/page/2/index.html">
+    <meta name="description" content="Unity Shader中的内置变量（时间篇） Unity Shader提供了一系列关于时间的内置变量来允许我们在Shader中访问运行时间，实现各种动画效果。Unity内置的时间变量     名称 类型 描述    _Time float4 t是自该场景加载开始所经过的时间，4个分量的值分别是(t&#x2F;20,t,2t,3t)。   _SinTime float4 t是时间的正弦值，4个分量">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第十一章-让画面动起来">
+<meta property="og:url" content="https://rising-moon.github.io/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E8%AE%A9%E7%94%BB%E9%9D%A2%E5%8A%A8%E8%B5%B7%E6%9D%A5/index.html">
 <meta property="og:site_name" content="RisingMoon的博客">
-<meta property="og:description" content="记录游戏开发点滴">
+<meta property="og:description" content="Unity Shader中的内置变量（时间篇） Unity Shader提供了一系列关于时间的内置变量来允许我们在Shader中访问运行时间，实现各种动画效果。Unity内置的时间变量     名称 类型 描述    _Time float4 t是自该场景加载开始所经过的时间，4个分量的值分别是(t&#x2F;20,t,2t,3t)。   _SinTime float4 t是时间的正弦值，4个分量">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-03-02T04:00:09.000Z">
+<meta property="article:modified_time" content="2022-03-02T11:01:35.053Z">
 <meta property="article:author" content="RisingMoon">
 <meta property="article:tag" content="Unity 渲染">
 <meta name="twitter:card" content="summary_large_image">
   
   
-  <title>分类 - 《UnityShader入门精要》 - RisingMoon的博客</title>
+  <title>第十一章-让画面动起来 - RisingMoon的博客</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
@@ -58,7 +75,7 @@
 
 
 <body>
-  <header style="height: 60vh;">
+  <header style="height: 40vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/blog/">
@@ -147,11 +164,38 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="分类 - 《UnityShader入门精要》">
+            <span class="h2" id="subtitle" title="第十一章-让画面动起来">
               
-                分类 - 《UnityShader入门精要》
+                第十一章-让画面动起来
               
             </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      RisingMoon
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-03-02 12:00" pubdate>
+        2022年3月2日 中午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+
+  
+
+  
+  
+</div>
 
             
           </div>
@@ -164,70 +208,127 @@
 
   <main>
     
-      <div class="container nopadding-x-md">
-        <div class="py-5" id="board"
-          >
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
-                
-
-<div class="list-group">
-  <p class="h4">共计 15 篇文章</p>
-  <hr>
-  
-  
-    
       
-      <p class="h5">2022</p>
-    
-    <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%85%AD%E7%AB%A0-Unity%E4%B8%AD%E7%9A%84%E5%9F%BA%E7%A1%80%E5%85%89%E7%85%A7/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">第六章-Unity中的基础光照</span>
-      <time style="float: right;">03-02</time>
-    </a>
-  
-    
-    <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0UnityShader%E4%B9%8B%E6%97%85/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">第五章-开始学习UnityShader之旅</span>
-      <time style="float: right;">03-02</time>
-    </a>
-  
-    
-    <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%AD%A6%E4%B9%A0Shader%E6%89%80%E9%9C%80%E7%9A%84%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">第四章-学习Shader所需的数学基础</span>
-      <time style="float: right;">03-02</time>
-    </a>
-  
-    
-    <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E4%B8%89%E7%AB%A0-UnityShader%E5%9F%BA%E7%A1%80/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">第三章-UnityShader基础</span>
-      <time style="float: right;">03-02</time>
-    </a>
-  
-    
-    <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%B8%B2%E6%9F%93%E6%B5%81%E6%B0%B4%E7%BA%BF/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">第二章-渲染流水线</span>
-      <time style="float: right;">03-02</time>
-    </a>
-  
-</div>
 
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">第十一章-让画面动起来</h1>
+            
+            <div class="markdown-body">
+              <h2 id="Unity-Shader中的内置变量（时间篇）"><a href="#Unity-Shader中的内置变量（时间篇）" class="headerlink" title="Unity Shader中的内置变量（时间篇）"></a>Unity Shader中的内置变量（时间篇）</h2><ul>
+<li>Unity Shader提供了一系列关于时间的内置变量来允许我们在Shader中访问运行时间，实现各种动画效果。<h4 id="Unity内置的时间变量"><a href="#Unity内置的时间变量" class="headerlink" title="Unity内置的时间变量"></a>Unity内置的时间变量</h4></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>_Time</td>
+<td>float4</td>
+<td>t是自该场景加载开始所经过的时间，4个分量的值分别是(t&#x2F;20,t,2t,3t)。</td>
+</tr>
+<tr>
+<td>_SinTime</td>
+<td>float4</td>
+<td>t是时间的正弦值，4个分量的值分别是(t&#x2F;8,t&#x2F;4,t&#x2F;2,t)。</td>
+</tr>
+<tr>
+<td>_CosTime</td>
+<td>float4</td>
+<td>t是时间的余弦值，4个分量的值分别是(t&#x2F;8,t&#x2F;4,t&#x2F;2,t)。</td>
+</tr>
+<tr>
+<td>unity_DeltaTime</td>
+<td>float4</td>
+<td>dt是时间增量，4个分量的值分别是(dt,1&#x2F;dt,smoothDt,1&#x2F;smoothDt)</td>
+</tr>
+</tbody></table>
+<h2 id="纹理动画"><a href="#纹理动画" class="headerlink" title="纹理动画"></a>纹理动画</h2><ul>
+<li>在各种资源都比较局限的移动平台上，我们甚至可以用纹理动画代替复杂的粒子系统。</li>
+</ul>
+<h3 id="序列帧动画"><a href="#序列帧动画" class="headerlink" title="序列帧动画"></a>序列帧动画</h3><ul>
+<li>一次播放一系列关键帧图像，播放速度达到一定数值时，看起来就是一个连续的动画。</li>
+<li>优点是灵活性强，不需要任何计算就可以得到非常细腻的动画。</li>
+<li>缺点是制作一张出色的序列帧纹理需要的美术工程量也很大。</li>
+</ul>
 
-  <nav aria-label="navigation">
-    <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/blog/categories/%E3%80%8AUnityShader%E5%85%A5%E9%97%A8%E7%B2%BE%E8%A6%81%E3%80%8B/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/blog/categories/%E3%80%8AUnityShader%E5%85%A5%E9%97%A8%E7%B2%BE%E8%A6%81%E3%80%8B/">1</a><span class="page-number current">2</span>
-    </span>
-  </nav>
-
-
-
-
-              </div>
             </div>
-          </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/blog/categories/%E3%80%8AUnityShader%E5%85%A5%E9%97%A8%E7%B2%BE%E8%A6%81%E3%80%8B/">《UnityShader入门精要》</a>
+                    
+                  </div>
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E5%B1%8F%E5%B9%95%E5%90%8E%E5%A4%84%E7%90%86%E6%95%88%E6%9E%9C/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">第十二章-屏幕后处理效果</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%8D%81%E7%AB%A0-%E9%AB%98%E7%BA%A7%E7%BA%B9%E7%90%86/">
+                        <span class="hidden-mobile">第十章-高级纹理</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
         </div>
       </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
     
 
     
@@ -334,6 +435,19 @@
   
 
 
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
 
 
 

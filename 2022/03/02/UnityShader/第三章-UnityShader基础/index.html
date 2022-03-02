@@ -1,0 +1,487 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/img/avatar.png">
+  <link rel="icon" href="/blog/img/avatar.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="RisingMoon">
+  <meta name="keywords" content="Unity 渲染">
+  
+    <meta name="description" content="shader和材质基本流程 创建材质 创建unity shader，并赋给创建的材质 将材质赋给要渲染的对象 在材质面板调整Unity Shader属性。Unity Shader 模板： standard surface shader：包含了标准光照模型的表面着色器模板 unlit shader：不含光照的基本顶点&#x2F;片元着色器 image effect shader：实现屏幕后处理效果基">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第三章-UnityShader基础">
+<meta property="og:url" content="https://rising-moon.github.io/blog/2022/03/02/UnityShader/%E7%AC%AC%E4%B8%89%E7%AB%A0-UnityShader%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="RisingMoon的博客">
+<meta property="og:description" content="shader和材质基本流程 创建材质 创建unity shader，并赋给创建的材质 将材质赋给要渲染的对象 在材质面板调整Unity Shader属性。Unity Shader 模板： standard surface shader：包含了标准光照模型的表面着色器模板 unlit shader：不含光照的基本顶点&#x2F;片元着色器 image effect shader：实现屏幕后处理效果基">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2019040113403669.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNDg2NjM5,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190401142029667.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNDg2NjM5,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2022-03-02T04:00:01.000Z">
+<meta property="article:modified_time" content="2022-03-02T10:59:57.645Z">
+<meta property="article:author" content="RisingMoon">
+<meta property="article:tag" content="Unity 渲染">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/2019040113403669.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNDg2NjM5,size_16,color_FFFFFF,t_70">
+  
+  
+  <title>第三章-UnityShader基础 - RisingMoon的博客</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/blog/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"rising-moon.github.io","root":"/blog/","version":"1.8.14","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":5},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/blog/local-search.xml"};
+  </script>
+  <script  src="/blog/js/utils.js" ></script>
+  <script  src="/blog/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 40vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/blog/">
+      <strong>RisingMoon的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/blog/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="第三章-UnityShader基础">
+              
+                第三章-UnityShader基础
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      RisingMoon
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-03-02 12:00" pubdate>
+        2022年3月2日 中午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">第三章-UnityShader基础</h1>
+            
+            <div class="markdown-body">
+              <h2 id="shader和材质"><a href="#shader和材质" class="headerlink" title="shader和材质"></a>shader和材质</h2><h3 id="基本流程"><a href="#基本流程" class="headerlink" title="基本流程"></a>基本流程</h3><ul>
+<li>创建材质</li>
+<li>创建unity shader，并赋给创建的材质</li>
+<li>将材质赋给要渲染的对象</li>
+<li>在材质面板调整Unity Shader属性。<h3 id="Unity-Shader-模板："><a href="#Unity-Shader-模板：" class="headerlink" title="Unity Shader 模板："></a>Unity Shader 模板：</h3></li>
+<li>standard surface shader：包含了标准光照模型的表面着色器模板</li>
+<li>unlit shader：不含光照的基本顶点&#x2F;片元着色器</li>
+<li>image effect shader：实现屏幕后处理效果基本模板<h2 id="ShaderLab"><a href="#ShaderLab" class="headerlink" title="ShaderLab"></a>ShaderLab</h2><h3 id="unity-shader-基本结构"><a href="#unity-shader-基本结构" class="headerlink" title="unity shader 基本结构"></a>unity shader 基本结构</h3></li>
+<li>Properties{} 属性</li>
+<li>SubShader{} 显卡使用的子着色器</li>
+<li>Fallback “” <h4 id="Properties-属性"><a href="#Properties-属性" class="headerlink" title="Properties{} 属性"></a>Properties{} 属性</h4></li>
+<li>每个属性有名字，通常由下划线开始</li>
+<li>显示的名称，出现在材质面板上的名字</li>
+<li>类型</li>
+<li>属性格式： 名字 (“显示名字”,属性类型) &#x3D; 初始值<br>即使我们没在Properties中定义属性，也可以在CG语言中定义属性。在Properties中定义属性是为了在编辑器中可以显示。<h4 id="SubShader"><a href="#SubShader" class="headerlink" title="SubShader{}"></a>SubShader{}</h4></li>
+<li>每一个Unity Shader文件中可以包含多个SubShader{}，但最少要有一个。</li>
+<li>Unity需要加载这个Unity Shader时，会扫描所有SubShader{}，选择第一个可以在目标平台中运行的SubShader{}。如果都不支持，Unity就会使用在Fallback语义定义的Unity Shader。</li>
+<li>SubShader基本结构</li>
+</ul>
+<figure class="highlight awk"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></div></td><td class="code"><pre><code class="hljs awk">Subshader &#123;<br>    <span class="hljs-regexp">//</span>可选的<br>    [Tags]<br>    <br>    <span class="hljs-regexp">//</span>可选的<br>    [RenderSetup]<br>    <br>    Pass&#123;<br>    &#125;<br>    <span class="hljs-regexp">//</span>Other Passes<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>每个Pass定义一次完整的渲染流程，数量过多会导致性能下降。<h5 id="状态设置"><a href="#状态设置" class="headerlink" title="状态设置"></a>状态设置</h5>状态名称 | 设置指令 | 解释</li>
+</ul>
+<p>—|—|—|<br>Cull | Cull Back\Front\Off | 设置剔除模式：剔除背面\正面\关闭剔除<br>ZTest | ZTest Less Greater\LEqual\GEqual\Equal\NotEqual\Always | 设置深度测试时使用的函数<br>ZWrite | ZWrite On\Off | 开启\关闭深度写入<br>Blend | Blend SrcFactor DstFactor | 开启关闭设置混合模式</p>
+<h4 id="SubShader标签"><a href="#SubShader标签" class="headerlink" title="SubShader标签"></a>SubShader标签</h4><ul>
+<li>是一个键值对，键和值都是字符串。</li>
+<li>告诉Unity渲染引擎，我希望怎样以及何时渲染这个对象。<br><img src="https://img-blog.csdnimg.cn/2019040113403669.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNDg2NjM5,size_16,color_FFFFFF,t_70" srcset="/blog/img/loading.gif" lazyload alt="SubShader标签类型"><br>以上标签仅可在SubShader中声明，而不可以在Pass块中声明。Pass块虽然可以定义标签，但是标签类型不同于SubShader中的标签。<h4 id="Pass语句块"><a href="#Pass语句块" class="headerlink" title="Pass语句块"></a>Pass语句块</h4><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs angelscript">Pass &#123;<br><span class="hljs-string">    [Name]</span><br><span class="hljs-string">    [Tags]</span><br><span class="hljs-string">    [RenderSetup]</span><br>    <span class="hljs-comment">//Other code</span><br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li>我们可以定义该Pass的名称<br>Name “MyPassName”<br>通过这个名称，我们可以使用UsePass来直接使用其他Unity Shader中的Pass。<br>UsePass “MyShader&#x2F;MYPASSNAME”<br>ps:Unity内部会把pass名称转化成大写字母</li>
+<li>Pass标签列表：<br><img src="https://img-blog.csdnimg.cn/20190401142029667.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNDg2NjM5,size_16,color_FFFFFF,t_70" srcset="/blog/img/loading.gif" lazyload alt="Pass标签列表"></li>
+<li>UsePass：可以使用该命令来服用其他Unity Shader中的Pass；</li>
+<li>GrabPass：该Pass负责抓取屏幕并将结果存储在一张纹理中，以用于后续的Pass处理。<h3 id="Fallback"><a href="#Fallback" class="headerlink" title="Fallback"></a>Fallback</h3>紧跟在SubShader语句块后面，它用于告诉Unity，如果所有SubShader语句块在这块显卡上都不能运行，就是用这个最低级的Shader。<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs awk">Fallback <span class="hljs-string">&quot;name&quot;</span><br><span class="hljs-regexp">//</span>或者<br>Fallback Off<br></code></pre></td></tr></table></figure>
+Fallback Off即如果所有SubShader都无法运行，那就不要管它了。</li>
+</ul>
+<h2 id="Unity-Shader形式"><a href="#Unity-Shader形式" class="headerlink" title="Unity Shader形式"></a>Unity Shader形式</h2><p>Unity Shader最重要的任务还是指定各种着色器所需的代码。这些着色器代码可以写在SubShader语义块中（表面着色器做法），也可以写在Pass语义块中（顶点&#x2F;片元着色器和固定函数着色器做法）。</p>
+<h3 id="表面着色器（Surface-shader）"><a href="#表面着色器（Surface-shader）" class="headerlink" title="表面着色器（Surface shader）"></a>表面着色器（Surface shader）</h3><ul>
+<li>由Unity自己创造的一种着色器，是对顶点&#x2F;片元着色器的进一步抽象，它需要的代码量很少，Unity在背后做了很多工作，但是渲染代价比较大。它存在的价值就是Unity帮我们处理了很多光照细节。</li>
+<li>表面着色器被定义在CGPROGRAM和ENDCG中，并且不再pass语义块中，表面着色器并不在意你使用了多少个pass，unity会在背后进行处理。</li>
+<li>CGPROGRAM和ENDCG中间的代码是使用CG&#x2F;HLSL编写的。<h3 id="顶点-x2F-片元着色器"><a href="#顶点-x2F-片元着色器" class="headerlink" title="顶点&#x2F;片元着色器"></a>顶点&#x2F;片元着色器</h3></li>
+<li>在Unity中我们可以使用CG&#x2F;HLSL语言来编写顶点&#x2F;片元着色器，他们更加复杂，但是灵活度也更高。</li>
+<li>顶点&#x2F;片元着色器是定义在pass语义块中的，虽然我们需要编写更多的代码，但我们可以控制渲染的细节。<h3 id="固定函数着色器"><a href="#固定函数着色器" class="headerlink" title="固定函数着色器"></a>固定函数着色器</h3></li>
+<li>大部分设备都支持上面两种中的可编程管线，某些较旧的设备，不支持可编程管线着色器，我们需要使用固定函数着色器。</li>
+<li>代码只相当于一些渲染设置，并且也是被定义在Pass语义块中，但它不是使用CG&#x2F;HLSL编写，而是完全使用ShaderLab编写。<h3 id="选择哪种渲染形式"><a href="#选择哪种渲染形式" class="headerlink" title="选择哪种渲染形式"></a>选择哪种渲染形式</h3></li>
+<li>如果想和各种光源打交道，使用表面着色器，但要小心在移动平台上的效果。</li>
+<li>如果光线较少，可以使用顶点&#x2F;片元着色器。</li>
+<li>如果想实现很多自定义的渲染效果，那么选择顶点&#x2F;片元着色器。</li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/blog/categories/%E3%80%8AUnityShader%E5%85%A5%E9%97%A8%E7%B2%BE%E8%A6%81%E3%80%8B/">《UnityShader入门精要》</a>
+                    
+                  </div>
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%AD%A6%E4%B9%A0Shader%E6%89%80%E9%9C%80%E7%9A%84%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">第四章-学习Shader所需的数学基础</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%B8%B2%E6%9F%93%E6%B5%81%E6%B0%B4%E7%BA%BF/">
+                        <span class="hidden-mobile">第二章-渲染流水线</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/blog/js/events.js" ></script>
+<script  src="/blog/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/blog/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/blog/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/blog/js/boot.js" ></script>
+
+
+</body>
+</html>

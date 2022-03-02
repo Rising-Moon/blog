@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/blog/img/favicon.png">
-  <link rel="icon" href="/blog/img/favicon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/img/avatar.png">
+  <link rel="icon" href="/blog/img/avatar.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -116,9 +116,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" target="_blank" rel="noopener" href="https://github.com/Rising-Moon">
-                <i class="iconfont icon-github-fill"></i>
-                github
+              <a class="nav-link" href="/blog/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
               </a>
             </li>
           
@@ -182,23 +182,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E4%BA%94%E7%AB%A0%20%E4%BD%BF%E7%94%A8%E5%99%AA%E5%A3%B0%20%E7%AC%94%E8%AE%B0/" target="_blank">
-          <img src="/blog/img/post_default.png" srcset="/blog/img/loading.gif" lazyload alt="使用噪声">
+        <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%85%AD%E7%AB%A0-Unity%E4%B8%AD%E7%9A%84%E5%9F%BA%E7%A1%80%E5%85%89%E7%85%A7/" target="_blank">
+          <img src="/blog/img/post_default.png" srcset="/blog/img/loading.gif" lazyload alt="第六章-Unity中的基础光照">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E4%BA%94%E7%AB%A0%20%E4%BD%BF%E7%94%A8%E5%99%AA%E5%A3%B0%20%E7%AC%94%E8%AE%B0/" target="_blank">
-          使用噪声
+        <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%85%AD%E7%AB%A0-Unity%E4%B8%AD%E7%9A%84%E5%9F%BA%E7%A1%80%E5%85%89%E7%85%A7/" target="_blank">
+          第六章-Unity中的基础光照
         </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E4%BA%94%E7%AB%A0%20%E4%BD%BF%E7%94%A8%E5%99%AA%E5%A3%B0%20%E7%AC%94%E8%AE%B0/" target="_blank">
+        <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%85%AD%E7%AB%A0-Unity%E4%B8%AD%E7%9A%84%E5%9F%BA%E7%A1%80%E5%85%89%E7%85%A7/" target="_blank">
           
-          消融效果 消融效果常见于游戏中的角色死亡、地图烧毁等效果。 原理十分简单，概括来说就是使用噪声纹理+透明度测试。我们使用噪声纹理采样的结果与某个阈值比较，如果小于阈值，就是用clip函数把对应的像素减掉，这些部分就对应了被“烧毁”的区域。镂空区域边缘的烧焦效果是将两种颜色混合，再用pow函数处理后，与原纹理颜色混合后的结果。 使用不同的噪声和纹理属性（材质面板上的Tiling和Offset值）都会
+          渲染的基础问题就是，我们如何决定一个像素的颜色？宏观上来看，渲染包括两个部分：决定一个像素的可见性，决定这个像素上的光照计算。光照模型就是用于决定在一个像素上进行怎样的光照计算。 我们是如何看这个世界的当我们说一个物体是红色的时候，意味着这个物体会反射更多的红光波，吸收其他的光波。而一个物体看起来是黑色的则是吸收了大部分的光波。模拟真实的光照环境来生成一张图片时，我们需要考虑3种物理现象：  首相
         </a>
       </p>
 
@@ -221,23 +221,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E5%85%AD%E7%AB%A0%20Unity%E4%B8%AD%E7%9A%84%E6%B8%B2%E6%9F%93%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%20%E7%AC%94%E8%AE%B0/" target="_blank">
-          <img src="/blog/img/post_default.png" srcset="/blog/img/loading.gif" lazyload alt="Unity中的渲染优化技术">
+        <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0UnityShader%E4%B9%8B%E6%97%85/" target="_blank">
+          <img src="/blog/img/post_default.png" srcset="/blog/img/loading.gif" lazyload alt="第五章-开始学习UnityShader之旅">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E5%85%AD%E7%AB%A0%20Unity%E4%B8%AD%E7%9A%84%E6%B8%B2%E6%9F%93%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%20%E7%AC%94%E8%AE%B0/" target="_blank">
-          Unity中的渲染优化技术
+        <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0UnityShader%E4%B9%8B%E6%97%85/" target="_blank">
+          第五章-开始学习UnityShader之旅
         </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E5%85%AD%E7%AB%A0%20Unity%E4%B8%AD%E7%9A%84%E6%B8%B2%E6%9F%93%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%20%E7%AC%94%E8%AE%B0/" target="_blank">
+        <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0UnityShader%E4%B9%8B%E6%97%85/" target="_blank">
           
-          移动平台的特点 移动平台上的GPU架构专注于尽可能使用更小的带宽和功能。 为了尽可能移除隐藏的表面，减少overdraw（即一个像素被绘制多次），PowerVR芯片（通常用于iOS和某些Android设备）使用了基于瓦片的延迟渲染架构，把所有的渲染图像装入一个个瓦片中，再由硬件找到可见的片元，只有这些可见片元才会执行片元着色器。另一些基于瓦片的GPU架构，Adreno（高通的芯片）和Mali（AR
+          最简单的片元着色器 12#pragma vertex vert#pragma fragment frat 告诉Unity那个函数包括顶点着色器的代码，哪个函数包括片元着色器的代码。 123float4 vert(float4 v : POSITION) SV_POSITION&amp;#123;    return mul(UNITY_MATRIX_MVP,v);&amp;#125; vert 中包含了这个顶点的
         </a>
       </p>
 
@@ -260,101 +260,101 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E5%9B%9B%E7%AB%A0%20%E9%9D%9E%E7%9C%9F%E5%AE%9E%E6%84%9F%E6%B8%B2%E6%9F%93%20%E7%AC%94%E8%AE%B0/" target="_blank">
-          <img src="/blog/img/post_default.png" srcset="/blog/img/loading.gif" lazyload alt="非真实感渲染">
+        <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%AD%A6%E4%B9%A0Shader%E6%89%80%E9%9C%80%E7%9A%84%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/" target="_blank">
+          <img src="/blog/img/default.png" srcset="/blog/img/loading.gif" lazyload alt="第四章-学习Shader所需的数学基础">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E5%9B%9B%E7%AB%A0%20%E9%9D%9E%E7%9C%9F%E5%AE%9E%E6%84%9F%E6%B8%B2%E6%9F%93%20%E7%AC%94%E8%AE%B0/" target="_blank">
-          非真实感渲染
+        <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%AD%A6%E4%B9%A0Shader%E6%89%80%E9%9C%80%E7%9A%84%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/" target="_blank">
+          第四章-学习Shader所需的数学基础
         </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E5%9B%9B%E7%AB%A0%20%E9%9D%9E%E7%9C%9F%E5%AE%9E%E6%84%9F%E6%B8%B2%E6%9F%93%20%E7%AC%94%E8%AE%B0/" target="_blank">
-          
-          尽管游戏渲染一般都是以照相写实主义作为主要目标。但也有许多游戏使用了非真实感渲染的方法来渲染游戏画面。 非真实感渲染的目标是使用一些渲染方法，使得画面达到和某些特殊的绘画风格相似的效果。例如：卡通、水彩风格。  卡通风格的渲染 实现卡通渲染有很多方法，其中之一就是基于色调的光照模型。 在实现中，我们往往会使用一张一维纹理进行采样，以控制漫反射的色调。 卡通风格的高光效果也和我们之前学习的光照不同
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/blog/categories/%E3%80%8AUnityShader%E5%85%A5%E9%97%A8%E7%B2%BE%E8%A6%81%E3%80%8B/">《UnityShader入门精要》</a>
-            
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E7%AB%A0%20%E9%AB%98%E7%BA%A7%E7%BA%B9%E7%90%86%20%E7%AC%94%E8%AE%B0/" target="_blank">
-          <img src="/blog/img/post_default.png" srcset="/blog/img/loading.gif" lazyload alt="高级纹理">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E7%AB%A0%20%E9%AB%98%E7%BA%A7%E7%BA%B9%E7%90%86%20%E7%AC%94%E8%AE%B0/" target="_blank">
-          高级纹理
-        </a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E7%AB%A0%20%E9%AB%98%E7%BA%A7%E7%BA%B9%E7%90%86%20%E7%AC%94%E8%AE%B0/" target="_blank">
-          
-          立方体纹理 环境映射的一种实现方式。 包含六张图像，对应立方体六个面。 纹理采样需要提供一个三维坐标，坐标作为一个矢量从立方体中心出发，采样结果就是矢量与立方体表面交点的信息。 优点：实现简单，得到的效果好。 缺点：引入新的物体、光源，或者物体发生移动时，需要重新生成。 常用与天空盒以及环境映射。天空盒 模拟天空或室内等背景 Unity中，天空盒是在所有不透明物体之后渲染的。用于环境映射的立方体纹
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/blog/categories/%E3%80%8AUnityShader%E5%85%A5%E9%97%A8%E7%B2%BE%E8%A6%81%E3%80%8B/">《UnityShader入门精要》</a>
-            
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%9B%9B%E7%AB%A0%20%E5%AD%A6%E4%B9%A0Shader%E6%89%80%E9%9C%80%E7%9A%84%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/" target="_blank">
-          <img src="/blog/img/default.png" srcset="/blog/img/loading.gif" lazyload alt="学习Shader所需的数学基础">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%9B%9B%E7%AB%A0%20%E5%AD%A6%E4%B9%A0Shader%E6%89%80%E9%9C%80%E7%9A%84%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/" target="_blank">
-          学习Shader所需的数学基础
-        </a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%9B%9B%E7%AB%A0%20%E5%AD%A6%E4%B9%A0Shader%E6%89%80%E9%9C%80%E7%9A%84%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/" target="_blank">
+        <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%AD%A6%E4%B9%A0Shader%E6%89%80%E9%9C%80%E7%9A%84%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/" target="_blank">
           
           笛卡尔坐标系三维笛卡尔坐标系 左手坐标系 右手坐标系Unity使用的坐标系 模型空间 左手坐标系 世界空间 左手坐标系 观察空间 右手坐标系，摄像机前向是z轴的负方向。坐标变换 模型空间变换到世界空间中，这个变换叫做模型变换。 世界空间变换的观察空间，这个变换叫做观察变换。 观察空间变换到裁剪空间（齐次剪切空间），这个变换的矩阵叫做裁剪矩阵，也被称为投影矩阵。裁剪空间由视锥体决定视锥体定义了场景内
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/blog/categories/%E3%80%8AUnityShader%E5%85%A5%E9%97%A8%E7%B2%BE%E8%A6%81%E3%80%8B/">《UnityShader入门精要》</a>
+            
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E4%B8%89%E7%AB%A0-UnityShader%E5%9F%BA%E7%A1%80/" target="_blank">
+          <img src="/blog/img/post_default.png" srcset="/blog/img/loading.gif" lazyload alt="第三章-UnityShader基础">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E4%B8%89%E7%AB%A0-UnityShader%E5%9F%BA%E7%A1%80/" target="_blank">
+          第三章-UnityShader基础
+        </a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E4%B8%89%E7%AB%A0-UnityShader%E5%9F%BA%E7%A1%80/" target="_blank">
+          
+          shader和材质基本流程 创建材质 创建unity shader，并赋给创建的材质 将材质赋给要渲染的对象 在材质面板调整Unity Shader属性。Unity Shader 模板： standard surface shader：包含了标准光照模型的表面着色器模板 unlit shader：不含光照的基本顶点&#x2F;片元着色器 image effect shader：实现屏幕后处理效果基
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/blog/categories/%E3%80%8AUnityShader%E5%85%A5%E9%97%A8%E7%B2%BE%E8%A6%81%E3%80%8B/">《UnityShader入门精要》</a>
+            
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%B8%B2%E6%9F%93%E6%B5%81%E6%B0%B4%E7%BA%BF/" target="_blank">
+          <img src="/blog/img/post_default.png" srcset="/blog/img/loading.gif" lazyload alt="第二章-渲染流水线">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%B8%B2%E6%9F%93%E6%B5%81%E6%B0%B4%E7%BA%BF/" target="_blank">
+          第二章-渲染流水线
+        </a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%B8%B2%E6%9F%93%E6%B5%81%E6%B0%B4%E7%BA%BF/" target="_blank">
+          
+          渲染流水线的起点是CPU 应用程序阶段  把数据加载到显存中 渲染所需数据从硬盘中加载到系统内存（RAM）中，又从系统内存中加载到显卡内存（VRAM）中。   因为显卡对现存访问速度最快，并且大多数显卡对内存没有访问权限。   数据加载到现存中后，系统内存中数据就可以删除，除非其中有数据会用作后续处理，例如网格数据用于碰撞检测则不进行删除。 因为从硬盘到内存的耗时较长，所以不会多次执行这个步骤。
         </a>
       </p>
 
