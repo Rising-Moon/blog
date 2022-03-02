@@ -58,7 +58,7 @@
 
 
 <body>
-  <header style="height: 60vh;">
+  <header style="height: 100vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/blog/">
@@ -104,6 +104,18 @@
           
           
             <li class="nav-item">
+              <a class="nav-link" href="/blog/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
               <a class="nav-link" href="/blog/about/">
                 <i class="iconfont icon-user-fill"></i>
                 关于
@@ -128,7 +140,7 @@
          style="background: url('/blog/img/banner.jpg') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
-        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.4)">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.2)">
           <div class="page-header text-center fade-in-up">
             <span class="h2" id="subtitle" title="打打游戏，做做游戏">
               
@@ -140,6 +152,10 @@
           </div>
 
           
+            <div class="scroll-down-bar">
+              <i class="iconfont icon-arrowdown"></i>
+            </div>
+          
         </div>
       </div>
     </div>
@@ -149,7 +165,7 @@
     
       <div class="container nopadding-x-md">
         <div class="py-5" id="board"
-          >
+          style=margin-top:0>
           
           <div class="container">
             <div class="row">
@@ -160,7 +176,59 @@
   <div class="row mx-auto index-card">
     
     
-    <article class="col-12 col-md-12 mx-auto index-info">
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/blog/2022/03/02/short/%E6%B8%B2%E6%9F%93%E4%BC%98%E5%8C%96/" target="_blank">
+          <img src="/blog/img/cover/1.png" srcset="/blog/img/loading.gif" lazyload alt="渲染合批优化">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/blog/2022/03/02/short/%E6%B8%B2%E6%9F%93%E4%BC%98%E5%8C%96/" target="_blank">
+          渲染合批优化
+        </a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/blog/2022/03/02/short/%E6%B8%B2%E6%9F%93%E4%BC%98%E5%8C%96/" target="_blank">
+          
+          优化方案 静态合批 动态合批 GPU Instance SRP Batcher   静态合批 预处理的形式，将一些静态的不常变化的物体进行一次静态的渲染，存储所得数据，空间换时间。  要求 需要共享相同的材质，并且不移动、旋转和缩放。 存在顶点和索引的数量限制。（大部分平台上是64k）  大致原理 将GameObject组合成大网格  缺陷 空间换时间，会占用较大内存 共享相同几何体的模型会出现多
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/blog/categories/%E9%9B%B6%E9%9B%B6%E6%95%A3%E6%95%A3/">零零散散</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/blog/tags/Unity%E6%B8%B2%E6%9F%93%E4%BC%98%E5%8C%96/">Unity渲染优化</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%8D%81%E5%85%AD%E7%AB%A0-Unity%E4%B8%AD%E7%9A%84%E6%B8%B2%E6%9F%93%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF/" target="_blank">
+          <img src="/blog/img/cover/2.png" srcset="/blog/img/loading.gif" lazyload alt="第十六章-Unity中的渲染优化技术">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
       <h1 class="index-header">
         
         <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%8D%81%E5%85%AD%E7%AB%A0-Unity%E4%B8%AD%E7%9A%84%E6%B8%B2%E6%9F%93%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF/" target="_blank">
@@ -193,7 +261,13 @@
   <div class="row mx-auto index-card">
     
     
-    <article class="col-12 col-md-12 mx-auto index-info">
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%8D%81%E4%BA%94%E7%AB%A0-%E4%BD%BF%E7%94%A8%E5%99%AA%E5%A3%B0/" target="_blank">
+          <img src="/blog/img/cover/2.png" srcset="/blog/img/loading.gif" lazyload alt="第十五章-使用噪声">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
       <h1 class="index-header">
         
         <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%8D%81%E4%BA%94%E7%AB%A0-%E4%BD%BF%E7%94%A8%E5%99%AA%E5%A3%B0/" target="_blank">
@@ -226,7 +300,13 @@
   <div class="row mx-auto index-card">
     
     
-    <article class="col-12 col-md-12 mx-auto index-info">
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%8D%81%E5%9B%9B%E7%AB%A0-%E9%9D%9E%E7%9C%9F%E5%AE%9E%E6%84%9F%E6%B8%B2%E6%9F%93/" target="_blank">
+          <img src="/blog/img/cover/2.png" srcset="/blog/img/loading.gif" lazyload alt="第十四章-非真实感渲染">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
       <h1 class="index-header">
         
         <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%8D%81%E5%9B%9B%E7%AB%A0-%E9%9D%9E%E7%9C%9F%E5%AE%9E%E6%84%9F%E6%B8%B2%E6%9F%93/" target="_blank">
@@ -259,7 +339,13 @@
   <div class="row mx-auto index-card">
     
     
-    <article class="col-12 col-md-12 mx-auto index-info">
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-%E4%BD%BF%E7%94%A8%E6%B7%B1%E5%BA%A6%E6%B3%95%E7%BA%BF%E5%92%8C%E7%BA%B9%E7%90%86/" target="_blank">
+          <img src="/blog/img/cover/2.png" srcset="/blog/img/loading.gif" lazyload alt="第十三章-使用深度法线和纹理">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
       <h1 class="index-header">
         
         <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-%E4%BD%BF%E7%94%A8%E6%B7%B1%E5%BA%A6%E6%B3%95%E7%BA%BF%E5%92%8C%E7%BA%B9%E7%90%86/" target="_blank">
@@ -292,7 +378,13 @@
   <div class="row mx-auto index-card">
     
     
-    <article class="col-12 col-md-12 mx-auto index-info">
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E5%B1%8F%E5%B9%95%E5%90%8E%E5%A4%84%E7%90%86%E6%95%88%E6%9E%9C/" target="_blank">
+          <img src="/blog/img/cover/2.png" srcset="/blog/img/loading.gif" lazyload alt="第十二章-屏幕后处理效果">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
       <h1 class="index-header">
         
         <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E5%B1%8F%E5%B9%95%E5%90%8E%E5%A4%84%E7%90%86%E6%95%88%E6%9E%9C/" target="_blank">
@@ -325,7 +417,13 @@
   <div class="row mx-auto index-card">
     
     
-    <article class="col-12 col-md-12 mx-auto index-info">
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E8%AE%A9%E7%94%BB%E9%9D%A2%E5%8A%A8%E8%B5%B7%E6%9D%A5/" target="_blank">
+          <img src="/blog/img/cover/2.png" srcset="/blog/img/loading.gif" lazyload alt="第十一章-让画面动起来">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
       <h1 class="index-header">
         
         <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E8%AE%A9%E7%94%BB%E9%9D%A2%E5%8A%A8%E8%B5%B7%E6%9D%A5/" target="_blank">
@@ -358,7 +456,13 @@
   <div class="row mx-auto index-card">
     
     
-    <article class="col-12 col-md-12 mx-auto index-info">
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%8D%81%E7%AB%A0-%E9%AB%98%E7%BA%A7%E7%BA%B9%E7%90%86/" target="_blank">
+          <img src="/blog/img/cover/2.png" srcset="/blog/img/loading.gif" lazyload alt="第十章-高级纹理">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
       <h1 class="index-header">
         
         <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%8D%81%E7%AB%A0-%E9%AB%98%E7%BA%A7%E7%BA%B9%E7%90%86/" target="_blank">
@@ -391,7 +495,13 @@
   <div class="row mx-auto index-card">
     
     
-    <article class="col-12 col-md-12 mx-auto index-info">
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%9B%B4%E5%A4%8D%E6%9D%82%E7%9A%84%E5%85%89%E7%85%A7/" target="_blank">
+          <img src="/blog/img/cover/2.png" srcset="/blog/img/loading.gif" lazyload alt="第九章-更复杂的光照">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
       <h1 class="index-header">
         
         <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%9B%B4%E5%A4%8D%E6%9D%82%E7%9A%84%E5%85%89%E7%85%A7/" target="_blank">
@@ -424,7 +534,13 @@
   <div class="row mx-auto index-card">
     
     
-    <article class="col-12 col-md-12 mx-auto index-info">
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%85%AB%E7%AB%A0-%E9%80%8F%E6%98%8E%E6%95%88%E6%9E%9C/" target="_blank">
+          <img src="/blog/img/cover/2.png" srcset="/blog/img/loading.gif" lazyload alt="第八章-透明效果">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
       <h1 class="index-header">
         
         <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%85%AB%E7%AB%A0-%E9%80%8F%E6%98%8E%E6%95%88%E6%9E%9C/" target="_blank">
@@ -436,39 +552,6 @@
         <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%85%AB%E7%AB%A0-%E9%80%8F%E6%98%8E%E6%95%88%E6%9E%9C/" target="_blank">
           
           实时渲染中要实现透明效果，通常在渲染模型时控制他的透明通道。 Unity中有两种方式实现透明效果：一种是透明度测试这种方法无法得到真正的半透明效果；另一种是透明度混合。 之前没有强调过渲染顺序的问题，因为深度缓冲的存在。在实时渲染中，深度缓冲是用于解决可见性的，他可以决定那些部分物体会被渲染在前面，而哪些部分会被其他物体遮挡。它的基本思想是：根据深度缓冲中的值来判断该片元距离摄像机的距离，当渲染
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/blog/categories/%E3%80%8AUnityShader%E5%85%A5%E9%97%A8%E7%B2%BE%E8%A6%81%E3%80%8B/">《UnityShader入门精要》</a>
-            
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E4%B8%83%E7%AB%A0-%E5%9F%BA%E7%A1%80%E7%BA%B9%E7%90%86/" target="_blank">
-          第七章-基础纹理
-        </a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E4%B8%83%E7%AB%A0-%E5%9F%BA%E7%A1%80%E7%BA%B9%E7%90%86/" target="_blank">
-          
-          纹理最初的目的就是使用一张图片来控制模型的外观。使用纹理映射技术，我们可以把一张图“黏”在模型表面，逐纹素（纹素的名字是为了与像素作区分）地控制模型的颜色。   在美术人员建模时，通常会在建模软件中利用纹理展开技术把纹理映射坐标存储到每个顶点上。纹理映射坐标定义了该顶点在纹理中对应的2D坐标。通常，这些坐标使用一个二维变量(u,v)来表示，其中u是横向坐标，而v是纵向坐标。因此，纹理坐标也被称为
         </a>
       </p>
 

@@ -16,23 +16,23 @@
   <meta name="author" content="RisingMoon">
   <meta name="keywords" content="Unity 渲染">
   
-    <meta name="description" content="Unity Shader中的内置变量（时间篇） Unity Shader提供了一系列关于时间的内置变量来允许我们在Shader中访问运行时间，实现各种动画效果。Unity内置的时间变量     名称 类型 描述    _Time float4 t是自该场景加载开始所经过的时间，4个分量的值分别是(t&#x2F;20,t,2t,3t)。   _SinTime float4 t是时间的正弦值，4个分量">
+    <meta name="description" content="优化方案 静态合批 动态合批 GPU Instance SRP Batcher   静态合批 预处理的形式，将一些静态的不常变化的物体进行一次静态的渲染，存储所得数据，空间换时间。  要求 需要共享相同的材质，并且不移动、旋转和缩放。 存在顶点和索引的数量限制。（大部分平台上是64k）  大致原理 将GameObject组合成大网格  缺陷 空间换时间，会占用较大内存 共享相同几何体的模型会出现多">
 <meta property="og:type" content="article">
-<meta property="og:title" content="第十一章-让画面动起来">
-<meta property="og:url" content="https://rising-moon.github.io/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E8%AE%A9%E7%94%BB%E9%9D%A2%E5%8A%A8%E8%B5%B7%E6%9D%A5/index.html">
+<meta property="og:title" content="渲染合批优化">
+<meta property="og:url" content="https://rising-moon.github.io/blog/2022/03/02/short/%E6%B8%B2%E6%9F%93%E4%BC%98%E5%8C%96/index.html">
 <meta property="og:site_name" content="RisingMoon的博客">
-<meta property="og:description" content="Unity Shader中的内置变量（时间篇） Unity Shader提供了一系列关于时间的内置变量来允许我们在Shader中访问运行时间，实现各种动画效果。Unity内置的时间变量     名称 类型 描述    _Time float4 t是自该场景加载开始所经过的时间，4个分量的值分别是(t&#x2F;20,t,2t,3t)。   _SinTime float4 t是时间的正弦值，4个分量">
+<meta property="og:description" content="优化方案 静态合批 动态合批 GPU Instance SRP Batcher   静态合批 预处理的形式，将一些静态的不常变化的物体进行一次静态的渲染，存储所得数据，空间换时间。  要求 需要共享相同的材质，并且不移动、旋转和缩放。 存在顶点和索引的数量限制。（大部分平台上是64k）  大致原理 将GameObject组合成大网格  缺陷 空间换时间，会占用较大内存 共享相同几何体的模型会出现多">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://rising-moon.github.io/blog/img/cover/2.png">
-<meta property="article:published_time" content="2022-03-02T04:00:09.000Z">
-<meta property="article:modified_time" content="2022-03-02T15:28:47.801Z">
+<meta property="og:image" content="https://rising-moon.github.io/blog/img/cover/1.png">
+<meta property="article:published_time" content="2022-03-02T15:05:00.000Z">
+<meta property="article:modified_time" content="2022-03-02T15:17:38.866Z">
 <meta property="article:author" content="RisingMoon">
-<meta property="article:tag" content="Unity 渲染">
+<meta property="article:tag" content="Unity渲染优化">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://rising-moon.github.io/blog/img/cover/2.png">
+<meta name="twitter:image" content="https://rising-moon.github.io/blog/img/cover/1.png">
   
   
-  <title>第十一章-让画面动起来 - RisingMoon的博客</title>
+  <title>渲染合批优化 - RisingMoon的博客</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
@@ -161,9 +161,9 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="第十一章-让画面动起来">
+            <span class="h2" id="subtitle" title="渲染合批优化">
               
-                第十一章-让画面动起来
+                渲染合批优化
               
             </span>
 
@@ -178,8 +178,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2022-03-02 12:00" pubdate>
-        2022年3月2日 中午
+      <time datetime="2022-03-02 23:05" pubdate>
+        2022年3月2日 晚上
       </time>
     </span>
   
@@ -223,49 +223,87 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">第十一章-让画面动起来</h1>
+            <h1 style="display: none">渲染合批优化</h1>
             
             <div class="markdown-body">
-              <h2 id="Unity-Shader中的内置变量（时间篇）"><a href="#Unity-Shader中的内置变量（时间篇）" class="headerlink" title="Unity Shader中的内置变量（时间篇）"></a>Unity Shader中的内置变量（时间篇）</h2><ul>
-<li>Unity Shader提供了一系列关于时间的内置变量来允许我们在Shader中访问运行时间，实现各种动画效果。<h4 id="Unity内置的时间变量"><a href="#Unity内置的时间变量" class="headerlink" title="Unity内置的时间变量"></a>Unity内置的时间变量</h4></li>
+              <h1 id="优化方案"><a href="#优化方案" class="headerlink" title="优化方案"></a>优化方案</h1><ul>
+<li>静态合批</li>
+<li>动态合批</li>
+<li>GPU Instance</li>
+<li>SRP Batcher</li>
 </ul>
-<table>
-<thead>
-<tr>
-<th>名称</th>
-<th>类型</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>_Time</td>
-<td>float4</td>
-<td>t是自该场景加载开始所经过的时间，4个分量的值分别是(t&#x2F;20,t,2t,3t)。</td>
-</tr>
-<tr>
-<td>_SinTime</td>
-<td>float4</td>
-<td>t是时间的正弦值，4个分量的值分别是(t&#x2F;8,t&#x2F;4,t&#x2F;2,t)。</td>
-</tr>
-<tr>
-<td>_CosTime</td>
-<td>float4</td>
-<td>t是时间的余弦值，4个分量的值分别是(t&#x2F;8,t&#x2F;4,t&#x2F;2,t)。</td>
-</tr>
-<tr>
-<td>unity_DeltaTime</td>
-<td>float4</td>
-<td>dt是时间增量，4个分量的值分别是(dt,1&#x2F;dt,smoothDt,1&#x2F;smoothDt)</td>
-</tr>
-</tbody></table>
-<h2 id="纹理动画"><a href="#纹理动画" class="headerlink" title="纹理动画"></a>纹理动画</h2><ul>
-<li>在各种资源都比较局限的移动平台上，我们甚至可以用纹理动画代替复杂的粒子系统。</li>
+<hr>
+<h2 id="静态合批"><a href="#静态合批" class="headerlink" title="静态合批"></a>静态合批</h2><ul>
+<li>预处理的形式，将一些静态的不常变化的物体进行一次静态的渲染，存储所得数据，空间换时间。</li>
 </ul>
-<h3 id="序列帧动画"><a href="#序列帧动画" class="headerlink" title="序列帧动画"></a>序列帧动画</h3><ul>
-<li>一次播放一系列关键帧图像，播放速度达到一定数值时，看起来就是一个连续的动画。</li>
-<li>优点是灵活性强，不需要任何计算就可以得到非常细腻的动画。</li>
-<li>缺点是制作一张出色的序列帧纹理需要的美术工程量也很大。</li>
+<h3 id="要求"><a href="#要求" class="headerlink" title="要求"></a>要求</h3><ul>
+<li>需要共享相同的材质，并且不移动、旋转和缩放。</li>
+<li>存在顶点和索引的数量限制。（大部分平台上是64k）</li>
 </ul>
+<h3 id="大致原理"><a href="#大致原理" class="headerlink" title="大致原理"></a>大致原理</h3><ul>
+<li>将GameObject组合成大网格</li>
+</ul>
+<h3 id="缺陷"><a href="#缺陷" class="headerlink" title="缺陷"></a>缺陷</h3><ul>
+<li>空间换时间，会占用较大内存</li>
+<li>共享相同几何体的模型会出现多个副本提升内存占用，例如密林级别的树木。</li>
+</ul>
+<hr>
+<h2 id="动态合批"><a href="#动态合批" class="headerlink" title="动态合批"></a>动态合批</h2><ul>
+<li>将一些较小的网格在CPU上转换组合，将可混合内容构建为一个较大的顶点缓冲区</li>
+</ul>
+<h3 id="要求-1"><a href="#要求-1" class="headerlink" title="要求"></a>要求</h3><ul>
+<li>顶点数有限制，并且限制很小，编辑器版本不同时限制不同，基本在几百的级别。</li>
+<li>transform中包含镜像的物体会影响动态合批，不深究，注意避免（scale中的某个分量为负数）</li>
+<li>使用多个pass的shader不会被动态合批</li>
+</ul>
+<h3 id="大致原理-1"><a href="#大致原理-1" class="headerlink" title="大致原理"></a>大致原理</h3><ul>
+<li>将可混合内容构建为一个较大的顶点缓冲区VAO</li>
+<li>渲染器为批处理设置材质状态</li>
+<li>将顶点缓冲器绑定到图形设备</li>
+<li>Unity将对应的偏移更新到顶点缓冲区，然后提交绘制调用</li>
+<li>主要优化的是材质状态设置的步骤</li>
+</ul>
+<h3 id="缺陷-1"><a href="#缺陷-1" class="headerlink" title="缺陷"></a>缺陷</h3><ul>
+<li>如今的可应用场景较少，很多情况下有更优的解决方案</li>
+<li>限制较大</li>
+</ul>
+<hr>
+<h2 id="GPU-Instance"><a href="#GPU-Instance" class="headerlink" title="GPU Instance"></a>GPU Instance</h2><ul>
+<li>相同网格的物体，只提交一份原始模型的vbo给gpu，将物体的不同属性抽出来组成buffer发给gpu。</li>
+</ul>
+<h3 id="要求-2"><a href="#要求-2" class="headerlink" title="要求"></a>要求</h3><ul>
+<li>需要模型网格一致</li>
+<li>需要使用同样的材质</li>
+</ul>
+<h3 id="大致原理-2"><a href="#大致原理-2" class="headerlink" title="大致原理"></a>大致原理</h3><ul>
+<li>提交一份基础的模型vbo给gpu</li>
+<li>将物体的不同属性封装为buffer发送给gpu</li>
+<li>gpu使用基础的vbo生成多个实例，并且使用buffer中的属性进行设置</li>
+</ul>
+<h3 id="缺陷-2"><a href="#缺陷-2" class="headerlink" title="缺陷"></a>缺陷</h3><ul>
+<li>在模型比较简单且数量不多时比不上静态合批，因为静态合批是一次draw call一次绘制，而GPU是一次提交多次绘制。</li>
+<li>有需要网格信息和材质都一样的前提（但材质属性可变）</li>
+</ul>
+<hr>
+<h2 id="Unity-SRP-Batcher"><a href="#Unity-SRP-Batcher" class="headerlink" title="Unity SRP Batcher"></a>Unity SRP Batcher</h2><ul>
+<li>Unity缓存了材质信息到GPU缓存中，不必每次渲染都传递材质信息</li>
+</ul>
+<h3 id="要求-3"><a href="#要求-3" class="headerlink" title="要求"></a>要求</h3><ul>
+<li>不可使用非Mesh对象（以后可能支持）</li>
+<li>需要使用兼容的shader（在Inspector中查看）</li>
+<li>使用了MaterialPropertyBlock技术的对象会失效（相当于更改了材质属性）</li>
+</ul>
+<h3 id="大致原理-3"><a href="#大致原理-3" class="headerlink" title="大致原理"></a>大致原理</h3><ul>
+<li>缓存材质信息到GPU中，每次只提交简单的Editor中Inspector中的数据</li>
+<li>使用缓存的材质信息进行渲染</li>
+<li>SRP Batcher本质上不会减少DrawCall，渲染的消耗主要是CPU的数据准备阶段，SRP主要优化的是数据准备的速度，所以DrawCall数量不会变化.</li>
+</ul>
+<h3 id="缺陷-3"><a href="#缺陷-3" class="headerlink" title="缺陷"></a>缺陷</h3><ul>
+<li>需要专门进行shader的编写支持</li>
+<li>需要使用Unity的SRP管线，例如（URP、HDRP等）</li>
+</ul>
+<hr>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/a3087f31ff88">Unity动态合批(Dynamic Batching)与静态合批(Static Batching)</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/leonwei/article/details/73274808">Unity中基于Gpu Instance进行大量物体渲染的实现与分析（一）</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/lsjsoft/article/details/90734932">SRP Batcher：提升您的渲染性能</a></p>
 
             </div>
             <hr>
@@ -275,10 +313,17 @@
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/blog/categories/%E3%80%8AUnityShader%E5%85%A5%E9%97%A8%E7%B2%BE%E8%A6%81%E3%80%8B/">《UnityShader入门精要》</a>
+                      <a class="hover-with-bg" href="/blog/categories/%E9%9B%B6%E9%9B%B6%E6%95%A3%E6%95%A3/">零零散散</a>
                     
                   </div>
                 
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/blog/tags/Unity%E6%B8%B2%E6%9F%93%E4%BC%98%E5%8C%96/">Unity渲染优化</a>
+                    
+                  </div>
                 
               </div>
               
@@ -293,18 +338,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E5%B1%8F%E5%B9%95%E5%90%8E%E5%A4%84%E7%90%86%E6%95%88%E6%9E%9C/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">第十二章-屏幕后处理效果</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%8D%81%E7%AB%A0-%E9%AB%98%E7%BA%A7%E7%BA%B9%E7%90%86/">
-                        <span class="hidden-mobile">第十章-高级纹理</span>
+                      <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%8D%81%E5%85%AD%E7%AB%A0-Unity%E4%B8%AD%E7%9A%84%E6%B8%B2%E6%9F%93%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF/">
+                        <span class="hidden-mobile">第十六章-Unity中的渲染优化技术</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
