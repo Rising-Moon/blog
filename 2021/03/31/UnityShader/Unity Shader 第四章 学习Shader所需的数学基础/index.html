@@ -23,11 +23,13 @@
 <meta property="og:site_name" content="RisingMoon的博客">
 <meta property="og:description" content="笛卡尔坐标系三维笛卡尔坐标系 左手坐标系 右手坐标系Unity使用的坐标系 模型空间 左手坐标系 世界空间 左手坐标系 观察空间 右手坐标系，摄像机前向是z轴的负方向。坐标变换 模型空间变换到世界空间中，这个变换叫做模型变换。 世界空间变换的观察空间，这个变换叫做观察变换。 观察空间变换到裁剪空间（齐次剪切空间），这个变换的矩阵叫做裁剪矩阵，也被称为投影矩阵。裁剪空间由视锥体决定视锥体定义了场景内">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://rising-moon.github.io/blog/img/default.png">
 <meta property="article:published_time" content="2021-03-31T10:09:28.300Z">
-<meta property="article:modified_time" content="2022-03-01T10:21:37.185Z">
+<meta property="article:modified_time" content="2022-03-02T05:37:06.683Z">
 <meta property="article:author" content="RisingMoon">
-<meta property="article:tag" content="《UnityShader入门精要》">
+<meta property="article:tag" content="Unity 渲染">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://rising-moon.github.io/blog/img/default.png">
   
   
   <title>学习Shader所需的数学基础 - RisingMoon的博客</title>
@@ -124,6 +126,18 @@
               <a class="nav-link" href="/blog/tags/">
                 <i class="iconfont icon-tags-fill"></i>
                 标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" target="_blank" rel="noopener" href="https://github.com/Rising-Moon">
+                <i class="iconfont icon-github-fill"></i>
+                github
               </a>
             </li>
           
@@ -230,13 +244,13 @@
             <div>
               <div class="post-metas mb-3">
                 
-                
-                  <div class="post-meta">
-                    <i class="iconfont icon-tags"></i>
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/blog/tags/%E3%80%8AUnityShader%E5%85%A5%E9%97%A8%E7%B2%BE%E8%A6%81%E3%80%8B/">《UnityShader入门精要》</a>
+                      <a class="hover-with-bg" href="/blog/categories/%E3%80%8AUnityShader%E5%85%A5%E9%97%A8%E7%B2%BE%E8%A6%81%E3%80%8B/">《UnityShader入门精要》</a>
                     
                   </div>
+                
                 
               </div>
               
@@ -251,9 +265,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E7%AB%A0%20%E9%AB%98%E7%BA%A7%E7%BA%B9%E7%90%86%20%E7%AC%94%E8%AE%B0/">
+                      <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E5%9B%9B%E7%AB%A0%20%E9%9D%9E%E7%9C%9F%E5%AE%9E%E6%84%9F%E6%B8%B2%E6%9F%93%20%E7%AC%94%E8%AE%B0/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">高级纹理</span>
+                        <span class="hidden-mobile">非真实感渲染</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -326,6 +340,30 @@
      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
   </div>
   
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
 
   
 
@@ -383,6 +421,8 @@
   
 
 
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
 
 
 

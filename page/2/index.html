@@ -111,6 +111,18 @@
             </li>
           
         
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" target="_blank" rel="noopener" href="https://github.com/Rising-Moon">
+                <i class="iconfont icon-github-fill"></i>
+                github
+              </a>
+            </li>
+          
+        
         
           <li class="nav-item" id="search-btn">
             <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
@@ -135,9 +147,9 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.4)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="人活一世远远不够">
+            <span class="h2" id="subtitle" title="打打游戏，做做游戏">
               
-                人活一世远远不够
+                打打游戏，做做游戏
               
             </span>
 
@@ -165,84 +177,6 @@
               <div class="col-12 col-md-10 m-auto">
                 
 
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0%20%E5%B1%8F%E5%B9%95%E5%90%8E%E5%A4%84%E7%90%86%E6%95%88%E6%9E%9C%20%E7%AC%94%E8%AE%B0/" target="_blank">
-          <img src="/blog/img/post_default.png" srcset="/blog/img/loading.gif" lazyload alt="屏幕后处理效果">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0%20%E5%B1%8F%E5%B9%95%E5%90%8E%E5%A4%84%E7%90%86%E6%95%88%E6%9E%9C%20%E7%AC%94%E8%AE%B0/" target="_blank">
-          屏幕后处理效果
-        </a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0%20%E5%B1%8F%E5%B9%95%E5%90%8E%E5%A4%84%E7%90%86%E6%95%88%E6%9E%9C%20%E7%AC%94%E8%AE%B0/" target="_blank">
-          
-          建立一个基本的屏幕后处理脚本系统 屏幕后处理，通常指的是在渲染完整个场景得到屏幕图像后，再对这个图像进行一系列操作，实现各种屏幕特效。可以为游戏画面添加更多的艺术效果，例如景深、运动模糊。 要实现屏幕后处理的基础在于得到渲染后的屏幕图像吗，即抓取平屏幕，Unity为我们提供了这样一个函数：  MonoBehaviour.OnRenderImage(RenderTexture src,RenderT
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/blog/tags/%E3%80%8AUnityShader%E5%85%A5%E9%97%A8%E7%B2%BE%E8%A6%81%E3%80%8B/">《UnityShader入门精要》</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E4%BA%94%E7%AB%A0%20%E4%BD%BF%E7%94%A8%E5%99%AA%E5%A3%B0%20%E7%AC%94%E8%AE%B0/" target="_blank">
-          <img src="/blog/img/post_default.png" srcset="/blog/img/loading.gif" lazyload alt="使用噪声">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E4%BA%94%E7%AB%A0%20%E4%BD%BF%E7%94%A8%E5%99%AA%E5%A3%B0%20%E7%AC%94%E8%AE%B0/" target="_blank">
-          使用噪声
-        </a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E4%BA%94%E7%AB%A0%20%E4%BD%BF%E7%94%A8%E5%99%AA%E5%A3%B0%20%E7%AC%94%E8%AE%B0/" target="_blank">
-          
-          消融效果 消融效果常见于游戏中的角色死亡、地图烧毁等效果。 原理十分简单，概括来说就是使用噪声纹理+透明度测试。我们使用噪声纹理采样的结果与某个阈值比较，如果小于阈值，就是用clip函数把对应的像素减掉，这些部分就对应了被“烧毁”的区域。镂空区域边缘的烧焦效果是将两种颜色混合，再用pow函数处理后，与原纹理颜色混合后的结果。 使用不同的噪声和纹理属性（材质面板上的Tiling和Offset值）都会
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/blog/tags/%E3%80%8AUnityShader%E5%85%A5%E9%97%A8%E7%B2%BE%E8%A6%81%E3%80%8B/">《UnityShader入门精要》</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
 
   <div class="row mx-auto index-card">
     
@@ -287,23 +221,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E5%9B%9B%E7%AB%A0%20%E9%9D%9E%E7%9C%9F%E5%AE%9E%E6%84%9F%E6%B8%B2%E6%9F%93%20%E7%AC%94%E8%AE%B0/" target="_blank">
-          <img src="/blog/img/post_default.png" srcset="/blog/img/loading.gif" lazyload alt="非真实感渲染">
+        <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0%20%E5%B1%8F%E5%B9%95%E5%90%8E%E5%A4%84%E7%90%86%E6%95%88%E6%9E%9C%20%E7%AC%94%E8%AE%B0/" target="_blank">
+          <img src="/blog/img/post_default.png" srcset="/blog/img/loading.gif" lazyload alt="屏幕后处理效果">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E5%9B%9B%E7%AB%A0%20%E9%9D%9E%E7%9C%9F%E5%AE%9E%E6%84%9F%E6%B8%B2%E6%9F%93%20%E7%AC%94%E8%AE%B0/" target="_blank">
-          非真实感渲染
+        <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0%20%E5%B1%8F%E5%B9%95%E5%90%8E%E5%A4%84%E7%90%86%E6%95%88%E6%9E%9C%20%E7%AC%94%E8%AE%B0/" target="_blank">
+          屏幕后处理效果
         </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E5%9B%9B%E7%AB%A0%20%E9%9D%9E%E7%9C%9F%E5%AE%9E%E6%84%9F%E6%B8%B2%E6%9F%93%20%E7%AC%94%E8%AE%B0/" target="_blank">
+        <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0%20%E5%B1%8F%E5%B9%95%E5%90%8E%E5%A4%84%E7%90%86%E6%95%88%E6%9E%9C%20%E7%AC%94%E8%AE%B0/" target="_blank">
           
-          尽管游戏渲染一般都是以照相写实主义作为主要目标。但也有许多游戏使用了非真实感渲染的方法来渲染游戏画面。 非真实感渲染的目标是使用一些渲染方法，使得画面达到和某些特殊的绘画风格相似的效果。例如：卡通、水彩风格。  卡通风格的渲染 实现卡通渲染有很多方法，其中之一就是基于色调的光照模型。 在实现中，我们往往会使用一张一维纹理进行采样，以控制漫反射的色调。 卡通风格的高光效果也和我们之前学习的光照不同
+          建立一个基本的屏幕后处理脚本系统 屏幕后处理，通常指的是在渲染完整个场景得到屏幕图像后，再对这个图像进行一系列操作，实现各种屏幕特效。可以为游戏画面添加更多的艺术效果，例如景深、运动模糊。 要实现屏幕后处理的基础在于得到渲染后的屏幕图像吗，即抓取平屏幕，Unity为我们提供了这样一个函数：  MonoBehaviour.OnRenderImage(RenderTexture src,RenderT
         </a>
       </p>
 
@@ -365,8 +299,47 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E5%9B%9B%E7%AB%A0%20%E9%9D%9E%E7%9C%9F%E5%AE%9E%E6%84%9F%E6%B8%B2%E6%9F%93%20%E7%AC%94%E8%AE%B0/" target="_blank">
+          <img src="/blog/img/post_default.png" srcset="/blog/img/loading.gif" lazyload alt="非真实感渲染">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E5%9B%9B%E7%AB%A0%20%E9%9D%9E%E7%9C%9F%E5%AE%9E%E6%84%9F%E6%B8%B2%E6%9F%93%20%E7%AC%94%E8%AE%B0/" target="_blank">
+          非真实感渲染
+        </a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%8D%81%E5%9B%9B%E7%AB%A0%20%E9%9D%9E%E7%9C%9F%E5%AE%9E%E6%84%9F%E6%B8%B2%E6%9F%93%20%E7%AC%94%E8%AE%B0/" target="_blank">
+          
+          尽管游戏渲染一般都是以照相写实主义作为主要目标。但也有许多游戏使用了非真实感渲染的方法来渲染游戏画面。 非真实感渲染的目标是使用一些渲染方法，使得画面达到和某些特殊的绘画风格相似的效果。例如：卡通、水彩风格。  卡通风格的渲染 实现卡通渲染有很多方法，其中之一就是基于色调的光照模型。 在实现中，我们往往会使用一张一维纹理进行采样，以控制漫反射的色调。 卡通风格的高光效果也和我们之前学习的光照不同
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/blog/tags/%E3%80%8AUnityShader%E5%85%A5%E9%97%A8%E7%B2%BE%E8%A6%81%E3%80%8B/">《UnityShader入门精要》</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
         <a href="/blog/2021/03/31/UnityShader/Unity%20Shader%20%E7%AC%AC%E5%9B%9B%E7%AB%A0%20%E5%AD%A6%E4%B9%A0Shader%E6%89%80%E9%9C%80%E7%9A%84%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/" target="_blank">
-          <img src="/blog/img/post_default.png" srcset="/blog/img/loading.gif" lazyload alt="学习Shader所需的数学基础">
+          <img src="/blog/img/default.png" srcset="/blog/img/loading.gif" lazyload alt="学习Shader所需的数学基础">
         </a>
       </div>
     
@@ -388,13 +361,13 @@
       <div class="index-btm post-metas">
         
         
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
             
-              <a href="/blog/tags/%E3%80%8AUnityShader%E5%85%A5%E9%97%A8%E7%B2%BE%E8%A6%81%E3%80%8B/">《UnityShader入门精要》</a>
+              <a href="/blog/categories/%E3%80%8AUnityShader%E5%85%A5%E9%97%A8%E7%B2%BE%E8%A6%81%E3%80%8B/">《UnityShader入门精要》</a>
             
           </div>
+        
         
       </div>
     </article>
@@ -455,6 +428,30 @@
      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
   </div>
   
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
 
   
 
@@ -499,6 +496,8 @@
 
 
 
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
 
 
 
