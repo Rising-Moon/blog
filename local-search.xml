@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>测试</title>
+    <link href="/blog/2022/03/03/short/test/"/>
+    <url>/blog/2022/03/03/short/test/</url>
+    
+    <content type="html"><![CDATA[<iframe width="640" height="360" frameborder="0" src="https://www.shadertoy.com/embed/WdGfWw?gui=true&t=10&paused=true&muted=false" allowfullscreen></iframe>]]></content>
+    
+    
+    <categories>
+      
+      <category>零零散散</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Shader</tag>
+      
+      <tag>ShaderToy</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>记录URP-ShaderLibrary常用库作用</title>
     <link href="/blog/2022/03/03/short/URP-Shader-%E5%B8%B8%E7%94%A8%E5%BA%93/"/>
     <url>/blog/2022/03/03/short/URP-Shader-%E5%B8%B8%E7%94%A8%E5%BA%93/</url>
