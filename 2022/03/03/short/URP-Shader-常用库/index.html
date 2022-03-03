@@ -16,23 +16,24 @@
   <meta name="author" content="RisingMoon">
   <meta name="keywords" content="Unity 渲染">
   
-    <meta name="description" content="优化方案 静态合批 动态合批 GPU Instance SRP Batcher   静态合批 预处理的形式，将一些静态的不常变化的物体进行一次静态的渲染，存储所得数据，空间换时间。  要求 需要共享相同的材质，并且不移动、旋转和缩放。 存在顶点和索引的数量限制。（大部分平台上是64k）  大致原理 将GameObject组合成大网格  缺陷 空间换时间，会占用较大内存 共享相同几何体的模型会出现多">
+    <meta name="description" content="URP中的ShaderLibrary 使用URP时我们通常不去引用核心库的文件，而是引用URP package中的ShaderLibrary文件夹下的hlsl文件，这里整理并且归纳一下各个文件包含的内容，方便之后翻看和定位。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="渲染合批优化">
-<meta property="og:url" content="https://rising-moon.github.io/blog/2022/03/02/short/%E6%B8%B2%E6%9F%93%E4%BC%98%E5%8C%96/index.html">
+<meta property="og:title" content="记录URP-ShaderLibrary常用库作用">
+<meta property="og:url" content="https://rising-moon.github.io/blog/2022/03/03/short/URP-Shader-%E5%B8%B8%E7%94%A8%E5%BA%93/index.html">
 <meta property="og:site_name" content="RisingMoon的博客">
-<meta property="og:description" content="优化方案 静态合批 动态合批 GPU Instance SRP Batcher   静态合批 预处理的形式，将一些静态的不常变化的物体进行一次静态的渲染，存储所得数据，空间换时间。  要求 需要共享相同的材质，并且不移动、旋转和缩放。 存在顶点和索引的数量限制。（大部分平台上是64k）  大致原理 将GameObject组合成大网格  缺陷 空间换时间，会占用较大内存 共享相同几何体的模型会出现多">
+<meta property="og:description" content="URP中的ShaderLibrary 使用URP时我们通常不去引用核心库的文件，而是引用URP package中的ShaderLibrary文件夹下的hlsl文件，这里整理并且归纳一下各个文件包含的内容，方便之后翻看和定位。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://rising-moon.github.io/blog/img/cover/1.png">
-<meta property="article:published_time" content="2022-03-02T15:05:00.000Z">
-<meta property="article:modified_time" content="2022-03-02T15:17:38.866Z">
+<meta property="article:published_time" content="2022-03-03T03:38:00.000Z">
+<meta property="article:modified_time" content="2022-03-03T06:45:34.428Z">
 <meta property="article:author" content="RisingMoon">
-<meta property="article:tag" content="Unity渲染优化">
+<meta property="article:tag" content="URP">
+<meta property="article:tag" content="Shader">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://rising-moon.github.io/blog/img/cover/1.png">
   
   
-  <title>渲染合批优化 - RisingMoon的博客</title>
+  <title>记录URP-ShaderLibrary常用库作用 - RisingMoon的博客</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
@@ -161,9 +162,9 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="渲染合批优化">
+            <span class="h2" id="subtitle" title="记录URP-ShaderLibrary常用库作用">
               
-                渲染合批优化
+                记录URP-ShaderLibrary常用库作用
               
             </span>
 
@@ -178,8 +179,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2022-03-02 23:05" pubdate>
-        2022年3月2日 晚上
+      <time datetime="2022-03-03 11:38" pubdate>
+        2022年3月3日 中午
       </time>
     </span>
   
@@ -223,87 +224,125 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">渲染合批优化</h1>
+            <h1 style="display: none">记录URP-ShaderLibrary常用库作用</h1>
             
             <div class="markdown-body">
-              <h1 id="优化方案"><a href="#优化方案" class="headerlink" title="优化方案"></a>优化方案</h1><ul>
-<li>静态合批</li>
-<li>动态合批</li>
-<li>GPU Instance</li>
-<li>SRP Batcher</li>
+              <h1 id="URP中的ShaderLibrary"><a href="#URP中的ShaderLibrary" class="headerlink" title="URP中的ShaderLibrary"></a>URP中的ShaderLibrary</h1><ul>
+<li>使用URP时我们通常不去引用核心库的文件，而是引用URP package中的ShaderLibrary文件夹下的hlsl文件，这里整理并且归纳一下各个文件包含的内容，方便之后翻看和定位。</li>
 </ul>
-<hr>
-<h2 id="静态合批"><a href="#静态合批" class="headerlink" title="静态合批"></a>静态合批</h2><ul>
-<li>预处理的形式，将一些静态的不常变化的物体进行一次静态的渲染，存储所得数据，空间换时间。</li>
+<span id="more"></span>
+
+<h2 id="Core-hlsl"><a href="#Core-hlsl" class="headerlink" title="Core.hlsl"></a>Core.hlsl</h2><ul>
+<li>定义了一些常用的用于可编程阶段间传递的数据结构</li>
 </ul>
-<h3 id="要求"><a href="#要求" class="headerlink" title="要求"></a>要求</h3><ul>
-<li>需要共享相同的材质，并且不移动、旋转和缩放。</li>
-<li>存在顶点和索引的数量限制。（大部分平台上是64k）</li>
+<h3 id="包含了一些常用函数"><a href="#包含了一些常用函数" class="headerlink" title="包含了一些常用函数"></a>包含了一些常用函数</h3><ol>
+<li>VertexPositionInputs GetVertexPositionInputs(float3 positionOS)：将模型空间的点转化到世界、投影、裁剪、NDC空间的坐标</li>
+<li>VertexNormalInputs GetVertexNormalInputs(float3 normalOS)：将法向量转化到世界空间（注意：非切向空间）</li>
+<li>VertexNormalInputs GetVertexNormalInputs(float3 normalOS, float4 tangentOS)：将法向量转化到切向空间，tangentOS的w分量用于控制朝向</li>
+<li>float3 GetCameraPositionWS()：获取相机的世界坐标</li>
+</ol>
+<h2 id="DeclareDepthTexture-hlsl"><a href="#DeclareDepthTexture-hlsl" class="headerlink" title="DeclareDepthTexture.hlsl"></a>DeclareDepthTexture.hlsl</h2><ul>
+<li>定义了采样深度贴图的函数</li>
+<li>包含两个函数:</li>
 </ul>
-<h3 id="大致原理"><a href="#大致原理" class="headerlink" title="大致原理"></a>大致原理</h3><ul>
-<li>将GameObject组合成大网格</li>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><pre><code class="hljs reasonml"><span class="hljs-built_in">float</span> <span class="hljs-constructor">SampleSceneDepth(<span class="hljs-params">float2</span> <span class="hljs-params">uv</span>)</span><br><span class="hljs-built_in">float</span> <span class="hljs-constructor">LoadSceneDepth(<span class="hljs-params">uint2</span> <span class="hljs-params">uv</span>)</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>这两个函数都用于获取深度信息，其区别为：</li>
+<li><ul>
+<li>Texture Sample 是纹理采样，会应用纹理寻址和纹理过滤</li>
 </ul>
-<h3 id="缺陷"><a href="#缺陷" class="headerlink" title="缺陷"></a>缺陷</h3><ul>
-<li>空间换时间，会占用较大内存</li>
-<li>共享相同几何体的模型会出现多个副本提升内存占用，例如密林级别的树木。</li>
+</li>
+<li><ul>
+<li>Texture Load是加载某一特定位置的texel</li>
 </ul>
-<hr>
-<h2 id="动态合批"><a href="#动态合批" class="headerlink" title="动态合批"></a>动态合批</h2><ul>
-<li>将一些较小的网格在CPU上转换组合，将可混合内容构建为一个较大的顶点缓冲区</li>
+</li>
+<li><ul>
+<li>前者使用的是[0,1]范围的浮点数形式的参数</li>
 </ul>
-<h3 id="要求-1"><a href="#要求-1" class="headerlink" title="要求"></a>要求</h3><ul>
-<li>顶点数有限制，并且限制很小，编辑器版本不同时限制不同，基本在几百的级别。</li>
-<li>transform中包含镜像的物体会影响动态合批，不深究，注意避免（scale中的某个分量为负数）</li>
-<li>使用多个pass的shader不会被动态合批</li>
+</li>
+<li><ul>
+<li>后者使用的是[0,textureSizeX&#x2F;Y]范围的整数形式的参数</li>
 </ul>
-<h3 id="大致原理-1"><a href="#大致原理-1" class="headerlink" title="大致原理"></a>大致原理</h3><ul>
-<li>将可混合内容构建为一个较大的顶点缓冲区VAO</li>
-<li>渲染器为批处理设置材质状态</li>
-<li>将顶点缓冲器绑定到图形设备</li>
-<li>Unity将对应的偏移更新到顶点缓冲区，然后提交绘制调用</li>
-<li>主要优化的是材质状态设置的步骤</li>
+</li>
+<li><ul>
+<li><a target="_blank" rel="noopener" href="https://gamedev.stackexchange.com/questions/65845/difference-between-texture-load-and-texture-sample-methods-in-directx/65853">Difference between texture.Sample and texture.Load</a></li>
 </ul>
-<h3 id="缺陷-1"><a href="#缺陷-1" class="headerlink" title="缺陷"></a>缺陷</h3><ul>
-<li>如今的可应用场景较少，很多情况下有更优的解决方案</li>
-<li>限制较大</li>
+</li>
+<li>通常gles3.0以上的设备都建议使用LOAD_TEXTURE的方式获取深度值</li>
 </ul>
-<hr>
-<h2 id="GPU-Instance"><a href="#GPU-Instance" class="headerlink" title="GPU Instance"></a>GPU Instance</h2><ul>
-<li>相同网格的物体，只提交一份原始模型的vbo给gpu，将物体的不同属性抽出来组成buffer发给gpu。</li>
+<h2 id="DeclareOpaqueTexture-hlsl"><a href="#DeclareOpaqueTexture-hlsl" class="headerlink" title="DeclareOpaqueTexture.hlsl"></a>DeclareOpaqueTexture.hlsl</h2><ul>
+<li>降采样贴图的采样</li>
+<li>里面的两个函数参考深度贴图的采样</li>
 </ul>
-<h3 id="要求-2"><a href="#要求-2" class="headerlink" title="要求"></a>要求</h3><ul>
-<li>需要模型网格一致</li>
-<li>需要使用同样的材质</li>
+<h2 id="Input-hlsl"><a href="#Input-hlsl" class="headerlink" title="Input.hlsl"></a>Input.hlsl</h2><ul>
+<li>引入了一些常用的变量及函数</li>
+<li>例如：灯光信息、坐标系转换函数、GPUInstancing库</li>
 </ul>
-<h3 id="大致原理-2"><a href="#大致原理-2" class="headerlink" title="大致原理"></a>大致原理</h3><ul>
-<li>提交一份基础的模型vbo给gpu</li>
-<li>将物体的不同属性封装为buffer发送给gpu</li>
-<li>gpu使用基础的vbo生成多个实例，并且使用buffer中的属性进行设置</li>
+<h2 id="Lighting-hlsl"><a href="#Lighting-hlsl" class="headerlink" title="Lighting.hlsl"></a>Lighting.hlsl</h2><ul>
+<li>光照计算相关函数</li>
+<li>包含：</li>
+<li><ul>
+<li>URP实现的PBR光照模型、BlinnPhong模型</li>
 </ul>
-<h3 id="缺陷-2"><a href="#缺陷-2" class="headerlink" title="缺陷"></a>缺陷</h3><ul>
-<li>在模型比较简单且数量不多时比不上静态合批，因为静态合批是一次draw call一次绘制，而GPU是一次提交多次绘制。</li>
-<li>有需要网格信息和材质都一样的前提（但材质属性可变）</li>
+</li>
+<li><ul>
+<li>Global Illumination 相关函数</li>
 </ul>
-<hr>
-<h2 id="Unity-SRP-Batcher"><a href="#Unity-SRP-Batcher" class="headerlink" title="Unity SRP Batcher"></a>Unity SRP Batcher</h2><ul>
-<li>Unity缓存了材质信息到GPU缓存中，不必每次渲染都传递材质信息</li>
+</li>
+<li><ul>
+<li>BDRF结构</li>
 </ul>
-<h3 id="要求-3"><a href="#要求-3" class="headerlink" title="要求"></a>要求</h3><ul>
-<li>不可使用非Mesh对象（以后可能支持）</li>
-<li>需要使用兼容的shader（在Inspector中查看）</li>
-<li>使用了MaterialPropertyBlock技术的对象会失效（相当于更改了材质属性）</li>
+</li>
+<li><ul>
+<li>Light结构</li>
 </ul>
-<h3 id="大致原理-3"><a href="#大致原理-3" class="headerlink" title="大致原理"></a>大致原理</h3><ul>
-<li>缓存材质信息到GPU中，每次只提交简单的Editor中Inspector中的数据</li>
-<li>使用缓存的材质信息进行渲染</li>
-<li>SRP Batcher本质上不会减少DrawCall，渲染的消耗主要是CPU的数据准备阶段，SRP主要优化的是数据准备的速度，所以DrawCall数量不会变化.</li>
+</li>
+<li><ul>
+<li>more</li>
 </ul>
-<h3 id="缺陷-3"><a href="#缺陷-3" class="headerlink" title="缺陷"></a>缺陷</h3><ul>
-<li>需要专门进行shader的编写支持</li>
-<li>需要使用Unity的SRP管线，例如（URP、HDRP等）</li>
+</li>
 </ul>
-<hr>
-<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/a3087f31ff88">Unity动态合批(Dynamic Batching)与静态合批(Static Batching)</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/leonwei/article/details/73274808">Unity中基于Gpu Instance进行大量物体渲染的实现与分析（一）</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/lsjsoft/article/details/90734932">SRP Batcher：提升您的渲染性能</a></p>
+<h2 id="Shadows-hlsl"><a href="#Shadows-hlsl" class="headerlink" title="Shadows.hlsl"></a>Shadows.hlsl</h2><ul>
+<li>投影相关函数和结构</li>
+<li>计算各种光的投影强度</li>
+</ul>
+<h2 id="SurfaceInput-hlsl"><a href="#SurfaceInput-hlsl" class="headerlink" title="SurfaceInput.hlsl"></a>SurfaceInput.hlsl</h2><ul>
+<li>定义表面信息的结构和一些帮助函数</li>
+<li>例如：</li>
+<li><ul>
+<li>透明度处理</li>
+</ul>
+</li>
+<li><ul>
+<li>采样反照率透明度</li>
+</ul>
+</li>
+<li><ul>
+<li>采样法线贴图</li>
+</ul>
+</li>
+<li><ul>
+<li>采样自发光</li>
+</ul>
+</li>
+</ul>
+<h2 id="UnityInput-hlsl"><a href="#UnityInput-hlsl" class="headerlink" title="UnityInput.hlsl"></a>UnityInput.hlsl</h2><ul>
+<li>包含了从Unity传入的数据</li>
+</ul>
+<h2 id="MetaInput-hlsl"><a href="#MetaInput-hlsl" class="headerlink" title="MetaInput.hlsl"></a>MetaInput.hlsl</h2><ul>
+<li>MetaPass相关处理函数</li>
+</ul>
+<h2 id="Particles-hlsl"><a href="#Particles-hlsl" class="headerlink" title="Particles.hlsl"></a>Particles.hlsl</h2><ul>
+<li>粒子系统相关函数</li>
+<li>例如：粒子颜色混合、切线空间的法线贴图采样等</li>
+</ul>
+<h2 id="ShaderGraphFunctions-hlsl"><a href="#ShaderGraphFunctions-hlsl" class="headerlink" title="ShaderGraphFunctions.hlsl"></a>ShaderGraphFunctions.hlsl</h2><ul>
+<li>ShaderGraph相关函数</li>
+</ul>
+<h2 id="ShaderTypes-cs-hlsl"><a href="#ShaderTypes-cs-hlsl" class="headerlink" title="ShaderTypes.cs.hlsl"></a>ShaderTypes.cs.hlsl</h2><ul>
+<li>自动生成的文件，不要手动修改</li>
+</ul>
 
             </div>
             <hr>
@@ -321,7 +360,9 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/blog/tags/Unity%E6%B8%B2%E6%9F%93%E4%BC%98%E5%8C%96/">Unity渲染优化</a>
+                      <a class="hover-with-bg" href="/blog/tags/URP/">URP</a>
+                    
+                      <a class="hover-with-bg" href="/blog/tags/Shader/">Shader</a>
                     
                   </div>
                 
@@ -338,18 +379,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/blog/2022/03/03/short/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA%E6%B5%81%E7%A8%8BDXR/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">光线追踪流程DXR</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%8D%81%E5%85%AD%E7%AB%A0-Unity%E4%B8%AD%E7%9A%84%E6%B8%B2%E6%9F%93%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF/">
-                        <span class="hidden-mobile">第十六章-Unity中的渲染优化技术</span>
+                      <a href="/blog/2022/03/03/short/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA%E6%B5%81%E7%A8%8BDXR/">
+                        <span class="hidden-mobile">光线追踪流程DXR</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

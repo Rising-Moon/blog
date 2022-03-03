@@ -4,6 +4,60 @@
   
   
   <entry>
+    <title>记录URP-ShaderLibrary常用库作用</title>
+    <link href="/blog/2022/03/03/short/URP-Shader-%E5%B8%B8%E7%94%A8%E5%BA%93/"/>
+    <url>/blog/2022/03/03/short/URP-Shader-%E5%B8%B8%E7%94%A8%E5%BA%93/</url>
+    
+    <content type="html"><![CDATA[<h1 id="URP中的ShaderLibrary"><a href="#URP中的ShaderLibrary" class="headerlink" title="URP中的ShaderLibrary"></a>URP中的ShaderLibrary</h1><ul><li>使用URP时我们通常不去引用核心库的文件，而是引用URP package中的ShaderLibrary文件夹下的hlsl文件，这里整理并且归纳一下各个文件包含的内容，方便之后翻看和定位。</li></ul><span id="more"></span><h2 id="Core-hlsl"><a href="#Core-hlsl" class="headerlink" title="Core.hlsl"></a>Core.hlsl</h2><ul><li>定义了一些常用的用于可编程阶段间传递的数据结构</li></ul><h3 id="包含了一些常用函数"><a href="#包含了一些常用函数" class="headerlink" title="包含了一些常用函数"></a>包含了一些常用函数</h3><ol><li>VertexPositionInputs GetVertexPositionInputs(float3 positionOS)：将模型空间的点转化到世界、投影、裁剪、NDC空间的坐标</li><li>VertexNormalInputs GetVertexNormalInputs(float3 normalOS)：将法向量转化到世界空间（注意：非切向空间）</li><li>VertexNormalInputs GetVertexNormalInputs(float3 normalOS, float4 tangentOS)：将法向量转化到切向空间，tangentOS的w分量用于控制朝向</li><li>float3 GetCameraPositionWS()：获取相机的世界坐标</li></ol><h2 id="DeclareDepthTexture-hlsl"><a href="#DeclareDepthTexture-hlsl" class="headerlink" title="DeclareDepthTexture.hlsl"></a>DeclareDepthTexture.hlsl</h2><ul><li>定义了采样深度贴图的函数</li><li>包含两个函数:</li></ul><figure class="highlight reasonml"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><pre><code class="hljs reasonml"><span class="hljs-built_in">float</span> <span class="hljs-constructor">SampleSceneDepth(<span class="hljs-params">float2</span> <span class="hljs-params">uv</span>)</span><br><span class="hljs-built_in">float</span> <span class="hljs-constructor">LoadSceneDepth(<span class="hljs-params">uint2</span> <span class="hljs-params">uv</span>)</span><br></code></pre></td></tr></table></figure><ul><li>这两个函数都用于获取深度信息，其区别为：</li><li><ul><li>Texture Sample 是纹理采样，会应用纹理寻址和纹理过滤</li></ul></li><li><ul><li>Texture Load是加载某一特定位置的texel</li></ul></li><li><ul><li>前者使用的是[0,1]范围的浮点数形式的参数</li></ul></li><li><ul><li>后者使用的是[0,textureSizeX&#x2F;Y]范围的整数形式的参数</li></ul></li><li><ul><li><a href="https://gamedev.stackexchange.com/questions/65845/difference-between-texture-load-and-texture-sample-methods-in-directx/65853">Difference between texture.Sample and texture.Load</a></li></ul></li><li>通常gles3.0以上的设备都建议使用LOAD_TEXTURE的方式获取深度值</li></ul><h2 id="DeclareOpaqueTexture-hlsl"><a href="#DeclareOpaqueTexture-hlsl" class="headerlink" title="DeclareOpaqueTexture.hlsl"></a>DeclareOpaqueTexture.hlsl</h2><ul><li>降采样贴图的采样</li><li>里面的两个函数参考深度贴图的采样</li></ul><h2 id="Input-hlsl"><a href="#Input-hlsl" class="headerlink" title="Input.hlsl"></a>Input.hlsl</h2><ul><li>引入了一些常用的变量及函数</li><li>例如：灯光信息、坐标系转换函数、GPUInstancing库</li></ul><h2 id="Lighting-hlsl"><a href="#Lighting-hlsl" class="headerlink" title="Lighting.hlsl"></a>Lighting.hlsl</h2><ul><li>光照计算相关函数</li><li>包含：</li><li><ul><li>URP实现的PBR光照模型、BlinnPhong模型</li></ul></li><li><ul><li>Global Illumination 相关函数</li></ul></li><li><ul><li>BDRF结构</li></ul></li><li><ul><li>Light结构</li></ul></li><li><ul><li>more</li></ul></li></ul><h2 id="Shadows-hlsl"><a href="#Shadows-hlsl" class="headerlink" title="Shadows.hlsl"></a>Shadows.hlsl</h2><ul><li>投影相关函数和结构</li><li>计算各种光的投影强度</li></ul><h2 id="SurfaceInput-hlsl"><a href="#SurfaceInput-hlsl" class="headerlink" title="SurfaceInput.hlsl"></a>SurfaceInput.hlsl</h2><ul><li>定义表面信息的结构和一些帮助函数</li><li>例如：</li><li><ul><li>透明度处理</li></ul></li><li><ul><li>采样反照率透明度</li></ul></li><li><ul><li>采样法线贴图</li></ul></li><li><ul><li>采样自发光</li></ul></li></ul><h2 id="UnityInput-hlsl"><a href="#UnityInput-hlsl" class="headerlink" title="UnityInput.hlsl"></a>UnityInput.hlsl</h2><ul><li>包含了从Unity传入的数据</li></ul><h2 id="MetaInput-hlsl"><a href="#MetaInput-hlsl" class="headerlink" title="MetaInput.hlsl"></a>MetaInput.hlsl</h2><ul><li>MetaPass相关处理函数</li></ul><h2 id="Particles-hlsl"><a href="#Particles-hlsl" class="headerlink" title="Particles.hlsl"></a>Particles.hlsl</h2><ul><li>粒子系统相关函数</li><li>例如：粒子颜色混合、切线空间的法线贴图采样等</li></ul><h2 id="ShaderGraphFunctions-hlsl"><a href="#ShaderGraphFunctions-hlsl" class="headerlink" title="ShaderGraphFunctions.hlsl"></a>ShaderGraphFunctions.hlsl</h2><ul><li>ShaderGraph相关函数</li></ul><h2 id="ShaderTypes-cs-hlsl"><a href="#ShaderTypes-cs-hlsl" class="headerlink" title="ShaderTypes.cs.hlsl"></a>ShaderTypes.cs.hlsl</h2><ul><li>自动生成的文件，不要手动修改</li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>零零散散</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>URP</tag>
+      
+      <tag>Shader</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>光线追踪流程DXR</title>
+    <link href="/blog/2022/03/03/short/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA%E6%B5%81%E7%A8%8BDXR/"/>
+    <url>/blog/2022/03/03/short/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA%E6%B5%81%E7%A8%8BDXR/</url>
+    
+    <content type="html"><![CDATA[<h1 id="DXR流程图"><a href="#DXR流程图" class="headerlink" title="DXR流程图"></a>DXR流程图</h1><p><img src="/blog/img/DXR.jpeg"></p><ul><li>在DX12的全新图形API中加入了可编程的光线追踪渲染管线，简称DXR。和传统光栅化管线一样，光线追踪的管线有固定的逻辑，也有可编程部分。新管线中新增了5种着色器（Shader）</li></ul><h1 id="可编程着色器"><a href="#可编程着色器" class="headerlink" title="可编程着色器"></a>可编程着色器</h1><h3 id="Ray-Generation："><a href="#Ray-Generation：" class="headerlink" title="Ray Generation："></a>Ray Generation：</h3><ul><li>用于生成射线。在此shader中可以调用TraceRay()递归追踪光线。</li></ul><h3 id="Intersection和Any-Hit："><a href="#Intersection和Any-Hit：" class="headerlink" title="Intersection和Any Hit："></a>Intersection和Any Hit：</h3><ul><li>当TraceRay()内检测到光线与物体相交时，会调用此shader，以便使用者检测此相交的物体是否特殊的图元。</li></ul><h3 id="Closest-Hit和Miss："><a href="#Closest-Hit和Miss：" class="headerlink" title="Closest Hit和Miss："></a>Closest Hit和Miss：</h3><ul><li>当TraceRay()遍历完整个场景后，会根据光线相交与否调用这两个Shader。Closest Hit可以执行像素着色处理，如材质、纹理查找、光照计算等。Closest Hit和Miss都可以继续递归调用TraceRay()。</li></ul><h1 id="Acceleration-Structure"><a href="#Acceleration-Structure" class="headerlink" title="Acceleration Structure"></a>Acceleration Structure</h1><ul><li>光线追踪渲染管线中，还涉及到加速结构（Acceleration Structure）。它的作用是保存场景的所有几何物体信息，在GPU内提供物体遍历、相交测试、光线构造等等的极限加速算法，使得光线追踪达到实时渲染级别。</li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>零零散散</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>渲染管线</tag>
+      
+      <tag>光线追踪</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>渲染合批优化</title>
     <link href="/blog/2022/03/02/short/%E6%B8%B2%E6%9F%93%E4%BC%98%E5%8C%96/"/>
     <url>/blog/2022/03/02/short/%E6%B8%B2%E6%9F%93%E4%BC%98%E5%8C%96/</url>

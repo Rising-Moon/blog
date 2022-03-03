@@ -177,6 +177,102 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/blog/2022/03/03/short/URP-Shader-%E5%B8%B8%E7%94%A8%E5%BA%93/" target="_blank">
+          <img src="/blog/img/cover/1.png" srcset="/blog/img/loading.gif" lazyload alt="记录URP-ShaderLibrary常用库作用">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/blog/2022/03/03/short/URP-Shader-%E5%B8%B8%E7%94%A8%E5%BA%93/" target="_blank">
+          记录URP-ShaderLibrary常用库作用
+        </a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/blog/2022/03/03/short/URP-Shader-%E5%B8%B8%E7%94%A8%E5%BA%93/" target="_blank">
+          
+          URP中的ShaderLibrary 使用URP时我们通常不去引用核心库的文件，而是引用URP package中的ShaderLibrary文件夹下的hlsl文件，这里整理并且归纳一下各个文件包含的内容，方便之后翻看和定位。
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/blog/categories/%E9%9B%B6%E9%9B%B6%E6%95%A3%E6%95%A3/">零零散散</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/blog/tags/URP/">URP</a>
+            
+              <a href="/blog/tags/Shader/">Shader</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/blog/2022/03/03/short/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA%E6%B5%81%E7%A8%8BDXR/" target="_blank">
+          <img src="/blog/img/cover/1.png" srcset="/blog/img/loading.gif" lazyload alt="光线追踪流程DXR">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/blog/2022/03/03/short/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA%E6%B5%81%E7%A8%8BDXR/" target="_blank">
+          光线追踪流程DXR
+        </a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/blog/2022/03/03/short/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA%E6%B5%81%E7%A8%8BDXR/" target="_blank">
+          
+          DXR流程图  在DX12的全新图形API中加入了可编程的光线追踪渲染管线，简称DXR。和传统光栅化管线一样，光线追踪的管线有固定的逻辑，也有可编程部分。新管线中新增了5种着色器（Shader）  可编程着色器Ray Generation： 用于生成射线。在此shader中可以调用TraceRay()递归追踪光线。  Intersection和Any Hit： 当TraceRay()内检测到光线与
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/blog/categories/%E9%9B%B6%E9%9B%B6%E6%95%A3%E6%95%A3/">零零散散</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/blog/tags/%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/">渲染管线</a>
+            
+              <a href="/blog/tags/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA/">光线追踪</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
         <a href="/blog/2022/03/02/short/%E6%B8%B2%E6%9F%93%E4%BC%98%E5%8C%96/" target="_blank">
           <img src="/blog/img/cover/1.png" srcset="/blog/img/loading.gif" lazyload alt="渲染合批优化">
         </a>
@@ -474,84 +570,6 @@
         <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%8D%81%E7%AB%A0-%E9%AB%98%E7%BA%A7%E7%BA%B9%E7%90%86/" target="_blank">
           
           立方体纹理 环境映射的一种实现方式。 包含六张图像，对应立方体六个面。 纹理采样需要提供一个三维坐标，坐标作为一个矢量从立方体中心出发，采样结果就是矢量与立方体表面交点的信息。 优点：实现简单，得到的效果好。 缺点：引入新的物体、光源，或者物体发生移动时，需要重新生成。 常用与天空盒以及环境映射。天空盒 模拟天空或室内等背景 Unity中，天空盒是在所有不透明物体之后渲染的。用于环境映射的立方体纹
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/blog/categories/%E3%80%8AUnityShader%E5%85%A5%E9%97%A8%E7%B2%BE%E8%A6%81%E3%80%8B/">《UnityShader入门精要》</a>
-            
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%9B%B4%E5%A4%8D%E6%9D%82%E7%9A%84%E5%85%89%E7%85%A7/" target="_blank">
-          <img src="/blog/img/cover/2.png" srcset="/blog/img/loading.gif" lazyload alt="第九章-更复杂的光照">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%9B%B4%E5%A4%8D%E6%9D%82%E7%9A%84%E5%85%89%E7%85%A7/" target="_blank">
-          第九章-更复杂的光照
-        </a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%9B%B4%E5%A4%8D%E6%9D%82%E7%9A%84%E5%85%89%E7%85%A7/" target="_blank">
-          
-          Unity的渲染路径 在Unity里，渲染路径决定了光照是如何应用到Unity Shader中的。因此如果想要处理光照，我们需要为每个Pass指定它使用的渲染路径，然后Unity就会将光源和处理后的信息放在数据里，我们才可以访问 Unity支持多种渲染路径，在Unity5.0之前有：前向渲染路径（Forward Rendering Path）、延迟渲染路径（Deferred Rendering P
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/blog/categories/%E3%80%8AUnityShader%E5%85%A5%E9%97%A8%E7%B2%BE%E8%A6%81%E3%80%8B/">《UnityShader入门精要》</a>
-            
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%85%AB%E7%AB%A0-%E9%80%8F%E6%98%8E%E6%95%88%E6%9E%9C/" target="_blank">
-          <img src="/blog/img/cover/2.png" srcset="/blog/img/loading.gif" lazyload alt="第八章-透明效果">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%85%AB%E7%AB%A0-%E9%80%8F%E6%98%8E%E6%95%88%E6%9E%9C/" target="_blank">
-          第八章-透明效果
-        </a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/blog/2022/03/02/UnityShader/%E7%AC%AC%E5%85%AB%E7%AB%A0-%E9%80%8F%E6%98%8E%E6%95%88%E6%9E%9C/" target="_blank">
-          
-          实时渲染中要实现透明效果，通常在渲染模型时控制他的透明通道。 Unity中有两种方式实现透明效果：一种是透明度测试这种方法无法得到真正的半透明效果；另一种是透明度混合。 之前没有强调过渲染顺序的问题，因为深度缓冲的存在。在实时渲染中，深度缓冲是用于解决可见性的，他可以决定那些部分物体会被渲染在前面，而哪些部分会被其他物体遮挡。它的基本思想是：根据深度缓冲中的值来判断该片元距离摄像机的距离，当渲染
         </a>
       </p>
 
